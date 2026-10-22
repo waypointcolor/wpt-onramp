@@ -128,8 +128,8 @@ Keep the two ideas side by side, not in competition. Appearance answers "what wi
 | Axis | Meaning | Direction |
 | --- | --- | --- |
 | W | Linear lightness (like Y) | White = 100, black = 0 |
-| p | First opponent axis | Reddish toward +p, greenish toward −p |
-| t | Second opponent axis | Yellowish toward +t, bluish toward −t |
+| p | Red–green axis | Reddish toward +p, greenish toward −p |
+| t | Yellow–blue axis | Yellowish toward +t, bluish toward −t |
 
 The layout echoes CIELAB on purpose: p is like a\* and t like b\*. W is like Y rather than L\*: a 50% gray has W = 50 (WLab's Lw, below, is the counterpart of L\*). Unlike CIELAB, Wpt uses no curves: each coordinate is a weighted mix of the three responses. That is why it works the same way from XYZ, cone responses or camera RGB.
 
@@ -163,7 +163,7 @@ Practical Wpt keeps that reference and lets you choose which materials carry it 
 
 ## WLab: measuring difference between materials
 
-WLab (Waypoint-Lab) reshapes Wpt so that a plain straight-line distance works as a color difference, comparable to the leading ΔE formulas. Like those CIELAB-based formulas, it corresponds to perceived color differences under a reference observing condition. WLab is not a color appearance space. It is to Wpt what CIELAB is to XYZ.
+WLab (Waypoint-Lab) reshapes Wpt so that a plain straight-line distance works as a color difference, comparable to the leading ΔE formulas. Another way to see it: every Wpt normalization predicts what the reference observer (CIE 1931, under illuminant C) would see for the same material. So a ΔE(WLab) is, in effect, the color difference that observer would judge between the two materials under illuminant C, wherever they were measured. WLab is not a color appearance space. It is to Wpt what CIELAB is to XYZ.
 
 WLab has three coordinates, Lw, aw and bw, read like L\*, a\* and b\*. The difference between two colors, ΔE(WLab), is just the straight-line distance between them, as ΔE\*ab is in CIELAB.
 
@@ -192,7 +192,7 @@ Each step can be undone, so WLab converts back to Wpt exactly. The equations tak
 | CIELAB with a CAT (CAT02),\
 change, ΔE00 | 0.9 | 14.1 |
 
-WLab reverses plain CIELAB's verdict: the real patch with its smooth spectrum moves little (2.3), and the jagged twin moves a lot. Across the 18 chromatic ColorChecker patches, plain CIELAB says the real patch moved more than its twin in 5 cases; WLab says so in none.
+WLab reverses plain CIELAB's verdict: the real patch with its smooth spectrum moves little (2.3), and the jagged twin moves a lot. Across the 18 chromatic ColorChecker patches, plain CIELAB says the real patch moved more than its twin in 5 cases; WLab, and CIELAB with a CAT, say so in none.
 
 The last row shows that the familiar fix agrees. Adding a proper chromatic adaptation step to CIELAB (CAT02, described under "CATs and MATs") gives the same verdict for this single observer. What WLab adds is one common representation in which the same comparison also works across observers and cameras, and an adjustment built on materials rather than on how colors look. What a material moves beyond typical materials is its color inconstancy.
 
@@ -360,7 +360,7 @@ You will rarely compute WLab yourself. As with ΔE today, you ask for it, read i
 | Light (observer) | Submission 1 (smooth) | Submission 2 (jagged) |
 | --- | --- | --- |
 | D50 booth, ΔE00 | 0.0 | 0.0 |
-| D50 booth | 0.0 | 0.0 |
+| D50 booth, ΔE(WLab) | 0.0 | 0.0 |
 | D65 daylight | 0.0 | 0.5 |
 | A, home incandescent | 0.1 | 0.7 |
 | F2, cool white fluorescent | 0.5 | 3.7 |
