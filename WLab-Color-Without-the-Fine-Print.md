@@ -80,12 +80,12 @@ Each of the observer's three responses is built up wavelength by wavelength: how
 
 ## A material does not have one CIELAB value
 
-Many people believe a swatch *is* its CIELAB value. It is not. A CIELAB value describes one swatch under one light for one observer, and changing the light or the observer changes it, by a different amount for each swatch.
+Many people believe the color of an object *is* its CIELAB value. It is not. A CIELAB value describes an object under one light for one observer, and changing the light or the observer changes it, by a different amount for each object.
 
 Three everyday effects come out of this:
 
-- **Metamerism.** Two materials with different spectra match under one light and not under another. Two gray fabrics match in the store and look different outdoors.
-- **Observer metamerism.** Two people, or a person and a camera, disagree about whether two samples match. Displays with narrow-band primaries are known for this.
+- **Lighting metamerism** (in textbooks, *illuminant metamerism*). Two materials with different spectra match under one light and not under another. Two gray fabrics match in the store and look different outdoors.
+- **Observer metamerism.** Two people, or a person and a camera, disagree about whether two samples match. Displays with narrow-band primaries are known for this. Metamerism on its own covers both kinds, including a change of light and observer together.
 - **Color inconstancy.** One material's color shifts, relative to typical materials around it, when the light or the observer changes.
 
 **A worked example.** Take one patch of the X-Rite ColorChecker, Purplish Blue, and its twin from the MetaChecker, a research set of computed spectra made to match each ColorChecker patch. The twin has a deliberately jagged spectrum that matches the real patch exactly for the CIE 1931 (2°) standard observer under D65. View both under D65, a CIE standard daylight, then under illuminant A, the CIE's standard incandescent light.
@@ -102,7 +102,7 @@ The two spectra look nothing alike, yet under D65 they give exactly the same num
 | CIELAB under A | 39.2, −1.9, −45.5 | 39.1, 25.1, −48.7 |
 | Change from D65 to A, ΔE<sub>00</sub> | 12.7 | 5.4 |
 
-Under D65 the two are a perfect match. Under A they are ΔE<sub>00</sub> 17.3 apart: that is metamerism. CIELAB also says the real, smooth-spectrum patch changed more than its jagged twin. Is that true of the materials?
+Under D65 the two are a perfect match. Under A they are ΔE<sub>00</sub> 17.3 apart: that is lighting metamerism. CIELAB also says the real, smooth-spectrum patch changed more than its jagged twin. Is that true of the materials?
 
 Not from plain CIELAB. Dividing by white (step 4 above) is a rough stand-in for the eye adapting to the light: it is exact for grays and only approximate for everything else. So a plain CIELAB change from one light to another mixes what the material does with what that rough step misses. The rest of this guide comes back to this example once the pieces are in place.
 
@@ -112,10 +112,10 @@ Not from plain CIELAB. Dividing by white (step 4 above) is a rough stand-in for 
 
 There are two different ways for colors to be "the same". The two are often confused, and the coordinates in the rest of this guide are built on the second one.
 
-Tear a sheet of paper in half. Put one half under daylight and the other under a warm incandescent bulb. Then ask two different questions:
+Tear a sheet of paper (possibly colored) in half. Put one half under daylight and the other under a warm incandescent bulb. Then ask two different questions:
 
 - **Do they look the same?** Usually not quite: the incandescent half looks warmer. Asking which patch under incandescent light *looks like* the daylight half gives **corresponding colors**. That is the ground truth behind chromatic adaptation transforms (CATs) and of color appearance models such as CIECAM02 and CAM16, which predict how colors look to a viewer adapted to their surroundings.
-- **Are they the same material?** Yes, and people can judge this to some degree, even when the two halves look different. Asking which patch under incandescent light is *made of the same stuff* is the idea behind experiments where people pick the **least dissimilar match**: the patch that differs least from the original when none matches exactly. Colors judged to be the same material belong to one **material color equivalency (MCE)** class.
+- **Are they the same material?** Yes, and people can judge this to some degree, even when the two halves look different. Asking which patch under incandescent light is *made of the same stuff* is the idea behind experiments where people pick the **least dissimilar match**: the patch that differs least from the original when none matches exactly. Treating colors as equivalent when they come from the same material is called **material color equivalency** (MCE).
 
 A material match involves all three ingredients together: the material, the light and the observer. A good material coordinate should stay roughly the same whichever light the material is under and whoever is looking. (For the research behind this idea, see "The idea of material color" under Further reading.)
 
@@ -213,7 +213,7 @@ Read across a row to compare the kinds of question each space answers; read down
 
 **Starting with the familiar one: the CAT.** A chromatic adaptation transform (CAT) predicts which numbers will *look the same* to one viewer after the light changes. Your eyes adapt: a white shirt still looks white under a warm lamp. A CAT models that adaptation. It is built from corresponding-color experiments, in which people match how colors look under two different lights. CATs such as Bradford and CAT02 are used widely in color management, and a CAT sits inside each color appearance model (CAT02 in CIECAM02, CAT16 in CAM16).
 
-**Now the new idea: the MAT.** A material adjustment transform (MAT) asks a different question: what will this *same material* measure under a different light, for a different observer, or both? It does not model a viewer adapting. It predicts the numbers the material itself would give in the new condition, as if you had measured it there.
+**Now the new idea: the MAT.** A material adjustment transform (MAT) asks a different question: what will this *same material* measure under a different light, for a different observer, or both? A MAT can be built in more than one way. This guide uses the one built on Wpt, the **Wpt MAT**, and from here on "MAT" means the Wpt MAT. It does not model a viewer adapting. It predicts the numbers the material itself would give in the new condition, as if you had measured it there.
 
 Think back to the torn sheet of paper. A CAT asks which patch under incandescent light *looks like* the daylight half. A MAT asks what the incandescent half of the same sheet will measure. The two answers usually differ.
 
@@ -224,6 +224,8 @@ Think back to the torn sheet of paper. A CAT asks which patch under incandescent
 - comparing data gathered for different observers.
 
 In each case there is no single adapted viewer to model, only a material and the numbers it would give. Because a MAT works through materials, it handles a change of observer as easily as a change of light. A CAT is not designed to bridge two different observers. It describes how one viewer adapts to a new light, and says nothing about how two viewers' responses relate. Even so, CATs often get used for these jobs, simply because they are the familiar tool.
+
+**Two lights with the same white.** Two lights can have exactly the same white (the same X, Y and Z for a white surface) and still have very different spectra: daylight and a white LED made of three narrow colored bands, for example. A CAT sees only the white, so it treats the two lights as the same and predicts no change. The colors of materials do change, because each material reflects the two spectra differently. Wpt normalization is built from how real materials respond under each light, so it tells the two lights apart, and a MAT predicts much of the change. In one test (1,600 Munsell colors, CIE 1931 observer, D65 against such an LED), the colors moved by ΔE<sub>00</sub> 2.6 on average and up to 9; the CAT predicted no change, and the MAT's predictions were off by 1.1 on average.
 
 **No MAT is exact.** A material's numbers in a new condition depend on its full spectrum, and three numbers do not record a spectrum. The Purplish Blue twins prove it: identical numbers under D65, different numbers under A. A MAT makes a close prediction for typical materials. What is left over is the color inconstancy that WLab measures.
 
@@ -256,7 +258,7 @@ The shape of the route is the same; what the middle step is built to keep is wha
 | White and grays | Mapped exactly (with full adaptation) | Mapped exactly |
 | Typical use | Appearance, color appearance models | Converting measurements, custom observers, comparing conditions |
 
-**Does it work?** Over 5,162 real reflectances (flowers, ColorChecker charts, Munsell, natural objects, paper, lumber, IT8 targets; the set includes Munsell samples of the kind Wpt is built from), the Wpt MAT predicted D65 colorimetry from other conditions more closely than CAT02 or Oleari's published MATs did (the Wpt paper, Further reading 2). For the 10° observer the mean ΔE<sub>00</sub> from illuminant A was 1.24 for the Wpt MAT against 2.35 for CAT02. The companion package runs a smaller version of this test (1,600 Munsell colors, CIE 1931 observer, A to D65): 1.09 for the Wpt MAT against 2.26 for CAT02. As you would expect, on the corresponding-color data in the same paper CAT02 predicts how colors look better than the MAT does. Each is best at its own job.
+**Does it work?** Over 5,162 real reflectances (flowers, ColorChecker charts, Munsell, natural objects, paper, lumber, IT8 targets; the set includes Munsell samples of the kind Wpt is built from), the Wpt MAT predicted D65 colorimetry from other conditions more closely than CAT02 or earlier published MATs did (the Wpt paper, Further reading 2). For the 10° observer the mean ΔE<sub>00</sub> from illuminant A was 1.24 for the Wpt MAT against 2.35 for CAT02. The companion package runs a smaller version of this test (1,600 Munsell colors, CIE 1931 observer, A to D65): 1.09 for the Wpt MAT against 2.26 for CAT02. As you would expect, on the corresponding-color data in the same paper CAT02 predicts how colors look better than the MAT does. Each is best at its own job.
 
 The two also chain together: a MAT can bring measurements to a standard condition, and a CAT or color appearance model can take over from there.
 
@@ -397,7 +399,7 @@ The companion package will be published as a public Git repository.
 | Least dissimilar match | Picking the sample under a new light that differs least from the original, when none matches exactly |
 | MAT (material adjustment transform) | Predicts a material's numbers under a different light, observer or both |
 | Material color equivalency (MCE) | Treating colors as the same when they come from the same material |
-| Metamerism | Two different spectra that match in one condition and not in another |
+| Metamerism | Two different spectra that match in one condition and not in another: lighting (illuminant) metamerism when the light changes, observer metamerism when the observer does |
 | Munsell notation | Hue, Value (lightness) and Chroma (colorfulness): 5R 5/6 is hue 5R, Value 5, Chroma 6 |
 | Observer | The three sensitivity curves of a person, a standard observer or a camera |
 | Observing condition | The observer and the light together |

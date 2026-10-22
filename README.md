@@ -17,7 +17,7 @@ that implements it here.
 | Folder | What it holds |
 | --- | --- |
 | `octave/` | The examples as Octave scripts (`ex01` to `ex06`), and `exportTables.m`, which writes the tables the other languages read |
-| `python/` | `wptonramp.py` (a port of the toolbox), `examples.py` (the same six examples), `robustness_report.py`, `hue_planes.py`, `annex_checks.py` (numbers the annex quotes that no example prints), and `check_against_octave.py` |
+| `python/` | `wptonramp.py` (a port of the toolbox), `examples.py` (the same six examples), `robustness_report.py`, `hue_planes.py`, `annex_checks.py` (numbers the guide and its annex quote that no example prints), and `check_against_octave.py` |
 | `figures/` | The figures of the guide (the guide itself, as PDF and Markdown, is at the top of the repository) |
 | `excel/` | `WLab-robustness-report.xlsx` (buyers: spectra in, report out, custom lights included); `WLab-calculator.xlsx` (XYZ to Wpt, WLab and CIELAB, the three color differences, a MAT sheet); `Wpt-normalization.xlsx` (the normalization and MATs step by step); `wpt_matrices.csv` behind them |
 | `toolbox/` | The Wpt toolbox (Octave), CIE tables, the Munsell reflectances that carry the Wpt normalization, and CSV copies for Python |
@@ -88,7 +88,7 @@ python -m venv .venv
 cd python
 ..\.venv\Scripts\python examples.py          # all six; or: examples.py ex05
 ..\.venv\Scripts\python check_against_octave.py
-..\.venv\Scripts\python annex_checks.py      # numbers quoted in the Technical annex
+..\.venv\Scripts\python annex_checks.py      # numbers quoted in the guide and its annex
 ```
 
 **Spreadsheet.** Open `excel/WLab-calculator.xlsx` in Excel or LibreOffice. Yellow cells are

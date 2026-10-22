@@ -7,6 +7,7 @@
 3. WLab with the 2015 paper's reference p, t against the toolbox reference (annex A.4).
 4. WLab with the constants rounded as published (annex A.5).
 5. Lw against CIELAB L* (guide "Sanity checks").
+6. Two lights with the same white: D65 against a three-band LED with D65's X, Y, Z (guide "CATs and MATs").
 """
 
 from pathlib import Path
@@ -77,6 +78,21 @@ for ill in ('C', 'D65', 'D50', 'A'):
     ls = w.ref2lab(M1600, T.observer['1931'], T.illuminant[ill])[0]
     d = np.abs(lw - ls)
     p(f'   {ill:4s} largest {d.max():.2f}  mean {d.mean():.2f}')
+
+# 6. A white LED of three narrow bands, weighted so that its white has exactly D65's X, Y, Z (CIE 1931).
+# A CAT sees only the white, so it predicts no change; the Wpt MAT works from how materials respond.
+obs, d65 = T.observer['1931'], T.illuminant['D65']
+p('6. D65 against a three-band LED with the same white, 1600 Munsell, CIE 1931, DeltaE00')
+for peaks, width in (((450, 540, 610), 12), ((455, 530, 620), 20)):
+    bands = np.column_stack([np.exp(-0.5 * ((T.nm - c) / width) ** 2) for c in peaks])
+    led = bands @ np.linalg.solve(obs.T @ bands, obs.T @ d65)
+    lab_d65, lab_led = w.ref2lab(M1600, obs, d65), w.ref2lab(M1600, obs, led)
+    change = w.delta_e00(lab_d65, lab_led)                       # also the CAT's error: it predicts no change
+    mat = w.mat(w.wpt_normalization(obs, d65, (NAMES, BASE_X, PT)), w.wpt_normalization(obs, led, (NAMES, BASE_X, PT)))
+    white_led = w.ref2xyz(np.ones(len(T.nm)), obs, led)[:, 0]
+    err = w.delta_e00(w.xyz_to_lab(mat @ w.ref2xyz(M1600, obs, d65), white_led), lab_led)
+    p(f'   bands at {peaks} nm, {width} nm wide: colors change by mean {change.mean():.2f}, largest {change.max():.1f} '
+      f'(= CAT error); Wpt MAT error mean {err.mean():.2f}, largest {err.max():.1f}')
 
 text = '\n'.join(out) + '\n'
 print(text, end='')
