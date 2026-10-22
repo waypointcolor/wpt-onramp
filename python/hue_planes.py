@@ -107,7 +107,7 @@ def svg(planes, anchor='dark'):
             if not P['ok_l'][i]:
                 o.append(f"<circle cx='{cx + chip * 0.72}' cy='{cy + chip * 0.72}' r='1.8' fill='#000000' fill-opacity='0.55'/>")
             if i == P['anchor']:
-                o.append(f"<rect x='{cx - 1.5}' y='{cy - 1.5}' width='{chip + 3}' height='{chip + 3}' fill='none' stroke='#1f1f1f' stroke-width='1.5'/>")
+                o.append(f"<rect x='{cx - 1.5}' y='{cy - 1.5}' width='{chip + 3}' height='{chip + 3}' fill='none' stroke='#ffffff' stroke-width='2'/>")
         for c in range(0, u, 2):
             o.append(f"<text x='{x + gap + c * (chip + gap) + chip / 2}' y='{y0 + ph + 16}' font-size='11' text-anchor='middle' fill='#5e5e5e'>{int(c * P['stepC'])}</text>")
         o.append(f"<text x='{x + pw / 2}' y='{y0 + ph + 34}' font-size='12' text-anchor='middle' fill='#5e5e5e'>chroma (WLab)</text>")
