@@ -1,7 +1,7 @@
 # License for the guide
 
-The guide, "Color Without the Fine Print: An Onramp to Wpt, WLab, and Material Color Equivalency",
-and its Technical annex (`guide/`, as PDF and Markdown), including their figures, are Copyright (c)
+The guide, "WLab and Wpt: Color Without the Fine Print. An Onramp to Material Color Equivalency",
+with its Technical annex (`WLab-Color-Without-the-Fine-Print.pdf` and `.md`), including its figures (`figures/`), are Copyright (c)
 2026 Max Derhak and are licensed under the Creative Commons Attribution 4.0 International License
 (CC BY 4.0): https://creativecommons.org/licenses/by/4.0/
 

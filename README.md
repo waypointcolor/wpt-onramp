@@ -1,7 +1,7 @@
 # wpt-onramp
 
-Code and spreadsheets that go with the guide **Color Without the Fine Print: An Onramp to Wpt,
-WLab, and Material Color Equivalency**. Every number the guide computes can be reproduced here, in
+Code and spreadsheets that go with the guide **WLab and Wpt: Color Without the Fine Print. An Onramp
+to Material Color Equivalency**. Every number the guide computes can be reproduced here, in
 GNU Octave (or MATLAB), in Python, or in a spreadsheet, and each example is a starting point for
 your own experiments. (Results the guide quotes from the published papers, such as the
 5,162-reflectance MAT test, are not rerun here; `ex05` runs a smaller version of that test.)
@@ -10,8 +10,7 @@ The equations themselves, with every constant and the reference coordinates of t
 samples, are in the guide's **Technical annex**; its section A.8 maps each equation to the file
 that implements it here.
 
-- **The guide:** [guide/Color-Without-the-Fine-Print.pdf](guide/Color-Without-the-Fine-Print.pdf) (also as [Markdown](guide/Color-Without-the-Fine-Print.md))
-- **The Technical annex:** [guide/Technical-annex.pdf](guide/Technical-annex.pdf) (also as [Markdown](guide/Technical-annex.md))
+- **The guide:** [WLab-Color-Without-the-Fine-Print.pdf](WLab-Color-Without-the-Fine-Print.pdf), with the Technical annex at the end (also readable here as [Markdown](WLab-Color-Without-the-Fine-Print.md))
 
 ## What is here
 
@@ -19,7 +18,7 @@ that implements it here.
 | --- | --- |
 | `octave/` | The examples as Octave scripts (`ex01` to `ex06`), and `exportTables.m`, which writes the tables the other languages read |
 | `python/` | `wptonramp.py` (a port of the toolbox), `examples.py` (the same six examples), `robustness_report.py`, `hue_planes.py`, `annex_checks.py` (numbers the annex quotes that no example prints), and `check_against_octave.py` |
-| `guide/` | The guide and its Technical annex, as PDF and Markdown |
+| `figures/` | The figures of the guide (the guide itself, as PDF and Markdown, is at the top of the repository) |
 | `excel/` | `WLab-robustness-report.xlsx` (buyers: spectra in, report out, custom lights included); `WLab-calculator.xlsx` (XYZ to Wpt, WLab and CIELAB, the three color differences, a MAT sheet); `Wpt-normalization.xlsx` (the normalization and MATs step by step); `wpt_matrices.csv` behind them |
 | `toolbox/` | The Wpt toolbox (Octave), CIE tables, the Munsell reflectances that carry the Wpt normalization, and CSV copies for Python |
 | `data/` | Spectra you supply for `ex02` (see `data/README.md`); empty in the repository |
