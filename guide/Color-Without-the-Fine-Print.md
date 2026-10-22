@@ -52,7 +52,7 @@ CIELAB gives each color three numbers:
 
 **The assumptions behind it**
 
-- **The light is fixed.** A value marked "D50, 2°" holds for D50 only. Under a tungsten lamp the sample has a different Lab value.
+- **The light is fixed.** A value marked "D50, 2°" holds for D50 only. Under an incandescent bulb (the traditional kind with a tungsten filament) the sample has a different Lab value.
 - **The viewer is an average.** The standard observers are averages from color-matching experiments run in the 1920s to 1950s. No real person matches them exactly, and no camera does.
 - **Dividing by white only lines up the neutrals.** Step 4 makes white and grays agree from one light to the next. It does not do the same for reds, greens or blues.
 
@@ -62,7 +62,7 @@ None of these is a flaw when you stay in one condition. They matter as soon as y
 
 Every color measurement combines three things: a light, a material and an observer. Change any one of them and the numbers change.
 
-- **The light** (illuminant) has a spectrum: how much power it gives at each wavelength. Daylight, tungsten, fluorescent and LED lights all have different spectra.
+- **The light** (illuminant) has a spectrum: how much power it gives at each wavelength. Daylight, incandescent, fluorescent and LED lights all have different spectra.
 - **The material** has a spectral reflectance: the fraction of light it sends back at each wavelength. This belongs to the object. It is the part people usually mean by "the color of the paint".
 - **The observer** has three sensitivity curves. For a person these are the three cone types, or the color-matching functions of a standard observer. For a camera they are its red, green and blue sensor curves.
 
@@ -82,7 +82,7 @@ Three everyday effects come out of this:
 - **Observer metamerism.** Two people, or a person and a camera, disagree about whether two samples match. Displays with narrow-band primaries are known for this.
 - **Color inconstancy.** One material's color shifts, relative to typical materials around it, when the light or the observer changes.
 
-**A worked example.** Take one patch of the X-Rite ColorChecker, Purplish Blue, and its twin from the MetaChecker, a research set of computed spectra made to match each ColorChecker patch. The twin has a deliberately jagged spectrum that matches the real patch exactly for the CIE 1931 (2°) standard observer under D65. View both under D65, then under illuminant A, a tungsten-like light.
+**A worked example.** Take one patch of the X-Rite ColorChecker, Purplish Blue, and its twin from the MetaChecker, a research set of computed spectra made to match each ColorChecker patch. The twin has a deliberately jagged spectrum that matches the real patch exactly for the CIE 1931 (2°) standard observer under D65. View both under D65, then under illuminant A, the standard for incandescent light.
 
 &#91;embedded content: ColorChecker and MetaChecker reflectances; CIE illuminants D65 and A · 380–730 nm in 5 nm steps\]
 
@@ -106,10 +106,10 @@ Not from plain CIELAB. Dividing by white (step 4 above) is a rough stand-in for 
 
 There are two different ways for colors to be "the same". Color science has long mixed them up, and the coordinates in the rest of this guide are built on the second one.
 
-Tear a sheet of paper in half. Put one half under daylight and the other under a warm tungsten lamp. Then ask two different questions:
+Tear a sheet of paper in half. Put one half under daylight and the other under a warm incandescent bulb. Then ask two different questions:
 
-- **Do they look the same?** Usually not quite: the tungsten half looks warmer. Asking which patch under tungsten *looks like* the daylight half gives **corresponding colors**. That is the ground truth behind chromatic adaptation transforms (CATs) and color appearance models such as CIECAM02 and CAM16.
-- **Are they the same material?** Yes, and people can judge this to some degree, even when the two halves look different. Asking which patch under tungsten is *made of the same stuff* is the idea behind experiments where people pick the **least dissimilar match**: the patch that differs least from the original when none matches exactly. Colors judged to be the same material belong to one **material color equivalency (MCE)** class.
+- **Do they look the same?** Usually not quite: the incandescent half looks warmer. Asking which patch under incandescent light *looks like* the daylight half gives **corresponding colors**. That is the ground truth behind chromatic adaptation transforms (CATs) and color appearance models such as CIECAM02 and CAM16.
+- **Are they the same material?** Yes, and people can judge this to some degree, even when the two halves look different. Asking which patch under incandescent light is *made of the same stuff* is the idea behind experiments where people pick the **least dissimilar match**: the patch that differs least from the original when none matches exactly. Colors judged to be the same material belong to one **material color equivalency (MCE)** class.
 
 A material match involves all three ingredients together: the material, the light and the observer. A good material coordinate should stay roughly the same whichever light the material is under and whoever is looking. (For the research behind this idea, see "The idea of material color" under Further reading.)
 
@@ -156,7 +156,7 @@ Practical Wpt keeps that reference and lets you choose which materials carry it 
 - **Neutrals are exact.** A spectrally flat gray has the same Wpt under every light and for every observer.
 - **The form of the observer doesn't matter.** Color-matching functions, cone fundamentals or any other re-mix of the same observer's curves give identical Wpt coordinates.
 - **It is invertible.** Every normalization can be run backwards, from Wpt to that condition's XYZ, cone values, or sensor values.
-- **A material's tints and shades keep one hue.** Combine a material's reflectance with a spectrally flat gray in any proportion, and every result has exactly the same Wpt hue, under any light and for any observer. That hue can move a little from one condition to another, but within each condition the whole family shares it. CIELAB does not do this: for one blue family, its hue spread by up to 12° under tungsten light.
+- **A material's tints and shades keep one hue.** Combine a material's reflectance with a spectrally flat gray in any proportion, and every result has exactly the same Wpt hue, under any light and for any observer. That hue can move a little from one condition to another, but within each condition the whole family shares it. CIELAB does not do this: for one blue family, its hue spread by up to 12° under incandescent light.
 - **It is not perceptually uniform.** Equal steps in Wpt are not equal visual steps. That is WLab's job.
 
 ## WLab: measuring difference between materials
@@ -208,7 +208,7 @@ Read across a row to compare the kinds of question each space answers; read down
 
 **Now the new idea: the MAT.** A material adjustment transform (MAT) asks a different question: what will this *same material* measure under a different light, for a different observer, or both? It does not model a viewer adapting. It predicts the numbers the material itself would give in the new condition, as if you had measured it there.
 
-Think back to the torn sheet of paper. A CAT asks which patch under tungsten *looks like* the daylight half. A MAT asks what the tungsten half of the same sheet will measure. The two answers usually differ.
+Think back to the torn sheet of paper. A CAT asks which patch under incandescent light *looks like* the daylight half. A MAT asks what the incandescent half of the same sheet will measure. The two answers usually differ.
 
 **When you want a MAT.** Whenever the material is what matters:
 
@@ -359,7 +359,7 @@ You will rarely compute WLab yourself. As with ΔE today, you ask for it, read i
 | D50 booth, ΔE00 | 0.0 | 0.0 |
 | D50 booth | 0.0 | 0.0 |
 | D65 daylight | 0.0 | 0.5 |
-| A, home tungsten | 0.1 | 0.7 |
+| A, home incandescent | 0.1 | 0.7 |
 | F2, cool white fluorescent | 0.5 | 3.7 |
 | F11, tri-band store fluorescent | 0.9 | 12.9 |
 | D50, CIE 1964 (10°) observer | 0.1 | 0.2 |
@@ -408,7 +408,7 @@ If you can compute CIELAB from a spectrum, you can compute WLab: it is one extra
 **Sanity checks**
 
 - A spectrally flat 50% gray gives WLab (76.1, 0, 0) under every light, the same as its L\*.
-- Lw lands close to CIELAB L\*: for ColorChecker patches under D65 the two agree to within about 0.5. They are identical under the reference condition (CIE 1931, illuminant C), and can differ by several units under tungsten-like light A.
+- Lw lands close to CIELAB L\*: for ColorChecker patches under D65 the two agree to within about 0.5. They are identical under the reference condition (CIE 1931, illuminant C), and can differ by several units under incandescent light A.
 - Recompute the Purplish Blue example earlier in this guide. If your numbers match it, your pipeline is right.
 
 **Tools**
@@ -436,7 +436,8 @@ when the light or observer changes |
 | Corresponding colors | Pairs of colors, under two lights, that\
 look the same; the basis of CATs |
 | D50, D65, A, C | Standard lights: D50 and D65 are daylight\
-(printing and general use), A is tungsten,\
+(printing and general use),\
+A is incandescent (a filament bulb),\
 C is an older daylight standard |
 | ΔE00 (CIEDE2000) | The standard color-difference formula,\
 computed from CIELAB |
