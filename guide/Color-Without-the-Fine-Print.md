@@ -163,7 +163,7 @@ Practical Wpt keeps that reference and lets you choose which materials carry it 
 
 ## WLab: measuring difference between materials
 
-WLab (Waypoint-Lab) reshapes Wpt so that a plain straight-line distance works as a color difference, comparable to the leading ΔE formulas. Another way to see it: every Wpt normalization predicts what the reference observer (CIE 1931, under illuminant C) would see for the same material. So a ΔE(WLab) is, in effect, the color difference that observer would judge between the two materials under illuminant C, wherever they were measured. WLab is not a color appearance space. It is to Wpt what CIELAB is to XYZ.
+WLab (Waypoint-Lab) reshapes Wpt so that a plain straight-line distance works as a color difference, comparable to the leading ΔE formulas. Another way to see it: every Wpt normalization predicts what the reference observer (CIE 1931, under illuminant C) would see for the same material. So a ΔE(WLab) is, in effect, the color difference that observer would judge between the two materials under illuminant C, wherever they were measured. The prediction is close, not exact: the reference observer may see a material slightly differently under illuminant C, and that difference is metamerism between the two observing conditions (observer and light). WLab is not a color appearance space. It is to Wpt what CIELAB is to XYZ.
 
 WLab has three coordinates, Lw, aw and bw, read like L\*, a\* and b\*. The difference between two colors, ΔE(WLab), is just the straight-line distance between them, as ΔE\*ab is in CIELAB.
 
