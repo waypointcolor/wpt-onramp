@@ -1,0 +1,10 @@
+Purplish Blue, CIE 1931 observer          real patch              twin
+CIELAB under D65              41.7   14.4  -42.9      41.7   14.4  -42.9
+CIELAB under A                39.2   -1.9  -45.5      39.1   25.1  -48.7
+CIELAB change, DeltaE00                     12.7                     5.4
+WLab under D65                41.7   10.3  -32.2      41.7   10.3  -32.2
+WLab under A                  42.2    8.0  -32.1      39.9   21.1  -32.2
+WLab change, DeltaE(WLab)                    2.3                    11.0
+Under A the two are DeltaE00 17.3 apart
+CIELAB with CAT02, change                    0.9                    14.1
+Of 18 chromatic patches, the real patch moves more than its twin: CIELAB 5, CIELAB with CAT02 0, WLab 0

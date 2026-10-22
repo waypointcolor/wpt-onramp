@@ -1,0 +1,8 @@
+# Text files use LF line endings in the repository and in every checkout.
+* text=auto eol=lf
+*.pdf binary
+*.png binary
+*.xlsx binary
+*.ods binary
+# The CIE LED table is kept byte for byte as the CIE published it (CRLF line endings).
+CIE_illum_LEDs.csv -text

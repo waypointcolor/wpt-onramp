@@ -1,0 +1,3 @@
+Wpt matrices, 14 conditions: largest difference from Octave 2.1e-10
+1,600 Munsell samples, CIE 1931 / D65: largest Wpt difference 5.7e-08, largest WLab difference 7.4e-08
+WLab back to Wpt: largest error 9.9e-14

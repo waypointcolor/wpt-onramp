@@ -1,0 +1,43 @@
+##### ex01
+CIELAB (L*, a*, b*), CIE 1931 observer; last column DeltaE00 from D65 to A
+5R 5/6     D65   51.4   26.6   12.8     A   54.9   27.5   19.1   F11   52.5   29.9   14.4     5.2
+5G 5/6     D65   51.8  -31.9   10.5     A   49.3  -29.3    3.6   F11   50.9  -29.9   10.5     5.0
+5PB 5/6    D65   51.6    0.5  -24.0     A   49.8   -6.4  -26.5   F11   50.2   -1.2  -26.6     6.7
+50% gray   D65   76.1    0.0    0.0     A   76.1    0.0    0.0   F11   76.1    0.0    0.0     0.0
+##### ex02
+Purplish Blue, CIE 1931 observer      real patch            twin
+CIELAB under D65             41.7   14.4  -42.9     41.7   14.4  -42.9
+CIELAB under A               39.2   -1.9  -45.5     39.1   25.1  -48.7
+WLab under D65               41.7   10.3  -32.2     41.7   10.3  -32.2
+WLab under A                 42.2    8.0  -32.1     39.9   21.1  -32.2
+CIELAB change, DeltaE00                 12.7                   5.4
+WLab change, DeltaE(WLab)                2.3                  11.0
+CIELAB with CAT02, change                 0.9                  14.1
+Of 18 chromatic patches, the real patch moves more than its twin: CIELAB 5, CIELAB with CAT02 0, WLab 0
+##### ex03
+White: W 100.00, p 0.00, t -0.00
+40 colors: W 19.77 to 19.77; chroma mean 27.60, range 25.59 to 30.27
+##### ex04
+1. Munsell 5PB 5/6, CIE 1931 observer
+   D65  XYZ  18.93  19.81  37.83  Wpt  19.77   2.45 -27.13  WLab  51.57   2.06 -22.79
+   A    XYZ  18.71  18.24  12.17  Wpt  19.83   1.90 -27.01  WLab  51.64   1.60 -22.74
+   F11  XYZ  18.51  18.57  22.42  Wpt  19.71   2.30 -27.21  WLab  51.51   1.93 -22.87
+2. 50% gray: D65 WLab [76.07  0.    0.  ]; A WLab [76.07 -0.    0.  ]; F11 WLab [76.07 -0.    0.  ]
+3. WLab back to Wpt, 1600 Munsell samples: largest error 9.9e-14
+4. CIE 2015 observer as XYZ functions or as LMS: largest Wpt difference 1.8e-13
+##### ex05
+1. Illuminant A to D65, 1600 Munsell samples, mean DeltaE00 from the true D65 values
+   no adjustment          19.80
+   white scaling in XYZ    4.10
+   Bradford CAT            2.03
+   CAT02                   2.26
+   Wpt MAT                 1.09
+2. CIE 2015 2-degree observer to CIE 1931 under D65, mean DeltaE00 from true 1931 values
+   2015 functions used as they are    0.95
+   2015 functions converted by MAT    0.31
+##### ex06
+5PB 5/6 and its twin, DeltaE(WLab): between them / sample moved / twin moved (from 1931, D65)
+   CIE 1931, D65    0.00     0.00     0.00
+   CIE 1931, A      1.29     0.47     1.34
+   CIE 1931, F11   15.29     0.17    15.30
+   CIE 1964, D65    4.23     0.09     4.15

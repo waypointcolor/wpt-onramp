@@ -1,0 +1,10 @@
+1. Munsell 5PB 5/6, CIE 1931 observer
+   D65  XYZ  18.93  19.81  37.83  Wpt  19.77   2.45 -27.13  WLab  51.57   2.06 -22.79
+   A    XYZ  18.71  18.24  12.17  Wpt  19.83   1.90 -27.01  WLab  51.64   1.60 -22.74
+   F11  XYZ  18.51  18.57  22.42  Wpt  19.71   2.30 -27.21  WLab  51.51   1.93 -22.87
+2. 50% gray, CIE 1931 observer
+   D65  WLab  76.07   0.00   0.00
+   A    WLab  76.07  -0.00   0.00
+   F11  WLab  76.07  -0.00   0.00
+3. WLab back to Wpt, 1600 Munsell samples: largest error 9.8e-14
+4. CIE 2015 observer as XYZ functions or as LMS: largest Wpt difference 5.5e-13

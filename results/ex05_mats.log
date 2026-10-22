@@ -1,0 +1,10 @@
+1. Illuminant A to D65, 1600 Munsell samples, mean DeltaE00 from the true D65 values
+   no adjustment (XYZ as measured)   19.80
+   white scaling in XYZ               4.10
+   Bradford CAT                       2.03
+   CAT02                              2.26
+   Wpt MAT                            1.09
+2. CIE 2015 2-degree observer to CIE 1931 under D65, mean DeltaE00 from true 1931 values
+   2015 functions used as they are    0.95
+   2015 functions converted by MAT    0.31
+3. LMS converted by MAT to the same observer's XYZ functions: largest XYZ difference 1.3e-13
