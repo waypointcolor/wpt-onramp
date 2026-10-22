@@ -8,7 +8,7 @@ Maxim W. Derhak (PhD) — October 22, 2026
 
 This guide is an onramp to a different way of describing color: by the *material* (a paint, an ink, a fabric, a plastic) rather than by how it measures under one light for one viewer. It ends at two coordinate systems: Wpt (pronounced "Waypoint"), which describes the material, and WLab (Waypoint Lab), which reshapes Wpt so that distances read like familiar ΔE color differences. Both are introduced properly once the groundwork is in place.
 
-Most people who work with color are at least familiar with the CIELAB color coordinate system and the ΔE color difference score. Both are good tools. But they answer a narrower question than most people think. This guide shows what that question is and what Wpt and WLab add.
+Most people who work with color are at least familiar with the CIELAB color coordinate system and the ΔE color difference score. Both are good tools, but every CIELAB value comes with fine print: it holds for one light and one standard viewer, and that is easy to forget. This guide shows why that matters and what Wpt and WLab add.
 
 No math is needed to follow the ideas. The few formulas are optional, and each one comes with a plain-words version.
 
