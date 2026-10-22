@@ -1,9 +1,10 @@
 # wpt-onramp
 
 Code and spreadsheets that go with the guide **Color Without the Fine Print: An Onramp to Wpt,
-WLab, and Material Color Equivalency**. Every number in the guide's examples can be reproduced
-here, in GNU Octave (or MATLAB), in Python, or in a spreadsheet, and each example is a starting
-point for your own experiments.
+WLab, and Material Color Equivalency**. Every number the guide computes can be reproduced here, in
+GNU Octave (or MATLAB), in Python, or in a spreadsheet, and each example is a starting point for
+your own experiments. (Results the guide quotes from the published papers, such as the
+5,162-reflectance MAT test, are not rerun here; `ex05` runs a smaller version of that test.)
 
 The equations themselves, with every constant and the reference coordinates of the 40 base
 samples, are in the guide's **Technical annex**; its section A.8 maps each equation to the file
@@ -17,7 +18,7 @@ that implements it here.
 | Folder | What it holds |
 | --- | --- |
 | `octave/` | The examples as Octave scripts (`ex01` to `ex06`), and `exportTables.m`, which writes the tables the other languages read |
-| `python/` | `wptonramp.py` (a port of the toolbox), `examples.py` (the same six examples), `robustness_report.py`, `hue_planes.py`, and `check_against_octave.py` |
+| `python/` | `wptonramp.py` (a port of the toolbox), `examples.py` (the same six examples), `robustness_report.py`, `hue_planes.py`, `annex_checks.py` (numbers the annex quotes that no example prints), and `check_against_octave.py` |
 | `guide/` | The guide and its Technical annex, as PDF and Markdown |
 | `excel/` | `WLab-robustness-report.xlsx` (buyers: spectra in, report out, custom lights included); `WLab-calculator.xlsx` (XYZ to Wpt, WLab and CIELAB, the three color differences, a MAT sheet); `Wpt-normalization.xlsx` (the normalization and MATs step by step); `wpt_matrices.csv` behind them |
 | `toolbox/` | The Wpt toolbox (Octave), CIE tables, the Munsell reflectances that carry the Wpt normalization, and CSV copies for Python |
@@ -28,7 +29,7 @@ that implements it here.
 
 | Guide section | Example | What it shows |
 | --- | --- | --- |
-| What you already know; A material does not have one Lab value | `ex01_cielab_moves` | CIELAB of the same samples under D65, A and F11: it moves, and by a different amount for each sample; a flat gray does not |
+| What you may already know; A material does not have one Lab value | `ex01_cielab_moves` | CIELAB of the same samples under D65, A and F11: it moves, and by a different amount for each sample; a flat gray does not |
 | A material does not have one Lab value; WLab (the example, revisited) | `ex02_purplish_blue` | The guide's worked example: a ColorChecker patch and its MetaChecker twin, in CIELAB, in CIELAB after a CAT (CAT02), and in WLab. Needs `data/`; `ex06` shows the same effect with included data only |
 | Wpt: coordinates for the material | `ex03_reference_samples` | The 42 samples that set up Wpt, in Wpt: white at W = 100, the 40 colors on one level and near one circle, the yellow at t = 100 |
 | Wpt; WLab; Getting started | `ex04_wpt_and_wlab` | The recipe from spectrum to WLab; sanity checks (50% gray is WLab 76.1, 0, 0 under every light; WLab converts back exactly; cone fundamentals and color-matching functions give the same Wpt) |
@@ -61,16 +62,19 @@ Both workbooks were recalculated in LibreOffice and checked against the Python c
 
 The CSV has wavelength (nm) in the first column and one column per material, standard first;
 any range and interval inside 380-780 nm works. No tolerances are built in: DeltaE(WLab) values are
-similar in size to DeltaE00 values, and experience with your own products should set the limits.
+designed to be similar in size to familiar DeltaE values, and experience with your own products should set the limits.
 `python/make_buyer_example.py` makes the guide's example (a brand red and two submissions that both
 match it exactly in a D50 booth) from the included Munsell set; its output is in `results/`.
 
 ## Gamut mapping: judging hue lines by eye
 
-`python/hue_planes.py H` draws one WLab hue angle H and the matching CIELAB hue as sRGB chips,
-lightness up and chroma across, so you can see whether each row keeps one hue as it gets more vivid
-(`results/hue_plane_288.svg` is the blue in the guide). Gamut mapping in WLab is an option to try and
-judge on your own work.
+`python/hue_planes.py H1 H2 ...` draws, for each WLab hue angle, chips from gray to vivid (lightness
+up, chroma across) split on the diagonal: the upper-left half holds WLab hue constant, the lower-right
+half has the same L* and C*ab at the CIELAB hue of the ringed chip (the darkest of the most vivid;
+`--anchor light` for the lightest). Where the halves differ, the two kinds of hue line disagree; judge
+by eye which keeps the hue. The condition is CIE 1931 under D50, the ICC PCS, shown through a Bradford
+adaptation to sRGB. `results/hue_planes_029_138_294.svg` is the picture in the guide. Gamut mapping
+in WLab is an option to try and judge on your own work.
 
 ## Running them
 
@@ -85,6 +89,7 @@ python -m venv .venv
 cd python
 ..\.venv\Scripts\python examples.py          # all six; or: examples.py ex05
 ..\.venv\Scripts\python check_against_octave.py
+..\.venv\Scripts\python annex_checks.py      # numbers quoted in the Technical annex
 ```
 
 **Spreadsheet.** Open `excel/WLab-calculator.xlsx` in Excel or LibreOffice. Yellow cells are

@@ -1,12 +1,17 @@
-"""Constant-hue planes in WLab and CIELAB, drawn as sRGB chips, to judge hue consistency for gamut mapping.
+"""Constant WLab hue against constant CIELAB hue, drawn as split sRGB chips, to judge hue lines for gamut mapping.
 
-For a WLab hue angle h, chips are laid out with lightness up and chroma across, keeping only the
-chips inside the sRGB gamut (CIE 1931 observer, D65). The CIELAB panel uses the CIELAB hue angle of
-the lightest of the most chromatic WLab chips, so both planes pass through that colour. Along each
-row the chips run from gray to the most vivid colour that fits: in a space whose hue lines suit
-gamut mapping, they keep the same hue as they get more vivid.
+For each WLab hue angle H, chips are laid out with lightness up and chroma across, keeping only the
+chips inside the sRGB gamut. Each chip is split on its diagonal:
 
-    python hue_planes.py 288 --out ../results/hue_plane_288.svg
+- upper-left triangle: the WLab chip, at hue H;
+- lower-right triangle: the CIELAB colour with the same L* and C*ab, but at the CIELAB hue of the
+  anchor chip (ringed): the darkest of the most chromatic WLab chips (--anchor light: the lightest).
+
+Where the two halves match, constant WLab hue and constant CIELAB hue agree; where they differ, a
+gamut mapping that holds CIELAB hue would change the hue that WLab holds. The condition is the CIE
+1931 observer under D50 (the ICC PCS), shown on screen through a Bradford adaptation to sRGB.
+
+    python hue_planes.py 29 294 138 --out ../results/hue_planes_029_294_138.svg
 
 Writes an SVG; open it in a browser, or convert it to PNG. Screen colours are approximate.
 """
@@ -17,95 +22,117 @@ import numpy as np
 
 import wptonramp as w
 
-M = np.linalg.inv(np.array([[0.4124, 0.3576, 0.1805], [0.2126, 0.7152, 0.0722], [0.0193, 0.1192, 0.9505]]))
+T = w.load_tables()
+OBS, ILL = T.observer['1931'], T.illuminant['D50']
+N = w.wpt_normalization(OBS, ILL, w.load_base())
+WHITE = w.ref2xyz(np.ones(len(T.nm)), OBS, ILL)[:, 0]
+
+RGB2XYZ = np.array([[0.4124, 0.3576, 0.1805], [0.2126, 0.7152, 0.0722], [0.0193, 0.1192, 0.9505]])
+BFD = np.array([[0.8951, 0.2664, -0.1614], [-0.7502, 1.7135, 0.0367], [0.0389, -0.0685, 1.0296]])
+W65 = RGB2XYZ @ np.ones(3) * 100
+TO_RGB = np.linalg.inv(RGB2XYZ) @ np.linalg.inv(BFD) @ np.diag((BFD @ W65) / (BFD @ WHITE)) @ BFD
 
 
-def lab_to_xyz(lab, white):
-    L, a, b = lab
+def lab_to_xyz(lab):
+    L, a, b = np.asarray(lab, float).reshape(3, -1)
     fy = (L + 16) / 116
     f = np.vstack([fy + a / 500, fy, fy - b / 200])
-    t = np.where(f > 6 / 29, f ** 3, 3 * (6 / 29) ** 2 * (f - 4 / 29))
-    return t * np.asarray(white).reshape(3, 1)
+    return np.where(f > 6 / 29, f ** 3, 3 * (6 / 29) ** 2 * (f - 4 / 29)) * WHITE.reshape(3, 1)
 
 
 def srgb(xyz):
-    lin = M @ (xyz / 100)
-    ok = np.all((lin >= 0) & (lin <= 1), axis=0)
+    lin = TO_RGB @ xyz / 100
+    ok = np.all((lin >= -1e-9) & (lin <= 1 + 1e-9), axis=0)
     g = np.clip(lin, 0, 1)
-    g = np.where(g <= 0.0031308, 12.92 * g, 1.055 * g ** (1 / 2.4) - 0.055)
-    return g, ok
+    return np.where(g <= 0.0031308, 12.92 * g, 1.055 * g ** (1 / 2.4) - 0.055), ok
 
 
-def planes(h_deg, stepL=5, stepC=5):
-    T = w.load_tables()
-    n = w.wpt_normalization(T.observer['1931'], T.illuminant['D65'], w.load_base())
-    white = w.ref2xyz(np.ones(len(T.nm)), T.observer['1931'], T.illuminant['D65'])[:, 0]
+def hue(v):
+    v = np.asarray(v, float).reshape(3, -1)
+    return np.degrees(np.arctan2(v[2], v[1])) % 360
+
+
+def plane(H, anchor='dark', stepL=5, stepC=5):
     Lv, Cv = np.arange(5, 96, stepL), np.arange(0, 91, stepC)
     Lg, Cg = (x.ravel() for x in np.meshgrid(Lv, Cv, indexing='ij'))
-    h = np.radians(h_deg)
-    xyz_w = n.wpt2xyz @ w.wlab_to_wpt(np.vstack([Lg, Cg * np.cos(h), Cg * np.sin(h)]))
+    xyz_w = N.wpt2xyz @ w.wlab_to_wpt(np.vstack([Lg, Cg * np.cos(np.radians(H)), Cg * np.sin(np.radians(H))]))
     rgb_w, ok_w = srgb(xyz_w)
     i = np.flatnonzero(ok_w)
     i = i[Cg[i] == Cg[i].max()]
-    i = i[np.argmax(Lg[i])]
-    ref = w.xyz_to_lab(xyz_w[:, i], white)[:, 0]
-    hab = np.degrees(np.arctan2(ref[2], ref[1])) % 360
-    hb = np.radians(hab)
-    xyz_l = lab_to_xyz(np.vstack([Lg, 2 * Cg * np.cos(hb), 2 * Cg * np.sin(hb)]), white)
-    rgb_l, ok_l = srgb(xyz_l)
-    # the gray of each row's lightness (the same in WLab and CIELAB, which agree on neutrals)
-    bg, _ = srgb(n.wpt2xyz @ w.wlab_to_wpt(np.vstack([Lv, 0 * Lv, 0 * Lv]).astype(float)))
-    return dict(Lv=Lv, Cv=Cv, Lg=Lg, Cg=Cg, w=(rgb_w, ok_w), l=(rgb_l, ok_l), hab=hab, bg=bg, stepC=stepC)
+    ia = i[np.argmin(Lg[i])] if anchor == 'dark' else i[np.argmax(Lg[i])]
+    lab_w = w.xyz_to_lab(xyz_w, WHITE)
+    hab = hue(lab_w[:, ia])[0]
+    cab = np.hypot(lab_w[1], lab_w[2])
+    rgb_l, ok_l = srgb(lab_to_xyz(np.vstack([lab_w[0], cab * np.cos(np.radians(hab)), cab * np.sin(np.radians(hab))])))
+    gap = (hue(lab_w) - hab + 180) % 360 - 180
+    bg, _ = srgb(N.wpt2xyz @ w.wlab_to_wpt(np.vstack([Lv, 0 * Lv, 0 * Lv]).astype(float)))
+    return dict(H=H, hab=hab, Lv=Lv, Lg=Lg, Cg=Cg, rgb_w=rgb_w, ok_w=ok_w, rgb_l=rgb_l, ok_l=ok_l,
+                gap=gap, bg=bg, anchor=ia, stepL=stepL, stepC=stepC)
 
 
-def svg(P, h_deg):
-    hexc = lambda c: '#%02x%02x%02x' % tuple(int(round(255 * v)) for v in c)
-    chip, gap, rowgap = 14, 2, 6
-    nL, nC = len(P['Lv']), len(P['Cv'])
-    used = max(int(P['Cg'][P['w'][1]].max() / P['stepC']), int(P['Cg'][P['l'][1]].max() / P['stepC'])) + 1
-    pw, ph = used * (chip + gap) + gap, nL * (chip + rowgap) + rowgap
-    W = max(760, 2 * pw + 260)
-    x0s, y0 = (W // 2 - pw - 40, W // 2 + 80), 110
-    H = y0 + ph + 90
+def hexc(c):
+    return '#%02x%02x%02x' % tuple(int(round(255 * v)) for v in c)
+
+
+def svg(planes, anchor='dark'):
+    chip, gap, rowgap, sep = 24, 2, 4, 36
+    nL = len(planes[0]['Lv'])
+    used = [int(P['Cg'][P['ok_w']].max() / P['stepC']) + 1 for P in planes]
+    pws = [u * (chip + gap) + gap for u in used]
+    ph = nL * (chip + rowgap) + rowgap
+    x0, y0 = 64, 148
+    W = max(760, x0 + sum(pws) + sep * (len(planes) - 1) + 24)
+    H = y0 + ph + 104
     o = [f"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 {W} {H}' width='{W}' height='{H}' font-family='Segoe UI, Helvetica, Arial, sans-serif'>",
          f"<rect width='{W}' height='{H}' fill='#ffffff'/>",
-         f"<text x='24' y='32' font-size='18' font-weight='600' fill='#1f1f1f'>One hue from gray to vivid: WLab and CIELAB</text>",
-         f"<text x='24' y='54' font-size='13' fill='#5e5e5e'>Each row is one lightness. Chips run from gray (left) to the most vivid color that fits</text>",
-         f"<text x='24' y='72' font-size='13' fill='#5e5e5e'>on screen (sRGB). For gamut mapping, a row should keep one hue as it gets more vivid.</text>"]
-    for p, (key, title, sc, xl) in enumerate((('w', f'WLab, hue {h_deg}°', 1, 'chroma (WLab)'),
-                                               ('l', f'CIELAB, hue {P["hab"]:.0f}°', 2, 'chroma C*ab'))):
-        x0 = x0s[p]
-        rgb, ok = P[key]
-        o.append(f"<text x='{x0}' y='{y0 - 12}' font-size='14' font-weight='600' fill='#1f1f1f'>{title}</text>")
+         "<text x='24' y='32' font-size='18' font-weight='600' fill='#1f1f1f'>Constant WLab hue against constant CIELAB hue</text>",
+         "<text x='24' y='54' font-size='13' fill='#5e5e5e'>Each row is one lightness, from gray (left) to the most vivid color that fits on screen. Each chip is split:</text>",
+         "<text x='24' y='72' font-size='13' fill='#5e5e5e'>upper left, constant WLab hue; lower right, the same L* and C*ab at the CIELAB hue of the ringed chip,</text>",
+         f"<text x='24' y='90' font-size='13' fill='#5e5e5e'>the {anchor}est of the most vivid. Where the halves differ, the two kinds of hue line disagree.</text>"]
+    x = x0
+    for P, pw, u in zip(planes, pws, used):
+        o.append(f"<text x='{x}' y='{y0 - 26}' font-size='13' font-weight='600' fill='#1f1f1f'>WLab hue {P['H']:.0f}°</text>")
+        o.append(f"<text x='{x}' y='{y0 - 9}' font-size='12' fill='#5e5e5e'>against CIELAB hue {P['hab']:.0f}°</text>")
         for k in range(nL):
             r = nL - 1 - k
             top = y0 if r == 0 else y0 + rowgap // 2 + r * (chip + rowgap)
             bot = y0 + ph if r == nL - 1 else y0 + rowgap // 2 + (r + 1) * (chip + rowgap)
-            o.append(f"<rect x='{x0}' y='{top}' width='{pw}' height='{bot - top}' fill='{hexc(P['bg'][:, k])}'/>")
-        for i in np.flatnonzero(ok):
-            r = nL - 1 - int(round((P['Lg'][i] - P['Lv'][0]) / 5))
+            o.append(f"<rect x='{x}' y='{top}' width='{pw}' height='{bot - top}' fill='{hexc(P['bg'][:, k])}'/>")
+        for i in np.flatnonzero(P['ok_w']):
+            r = nL - 1 - int(round((P['Lg'][i] - P['Lv'][0]) / P['stepL']))
             c = int(round(P['Cg'][i] / P['stepC']))
-            o.append(f"<rect x='{x0 + gap + c * (chip + gap)}' y='{y0 + rowgap + r * (chip + rowgap)}' width='{chip}' height='{chip}' fill='{hexc(rgb[:, i])}'/>")
-        for L in (10, 30, 50, 70, 90):
-            r = nL - 1 - int(round((L - P['Lv'][0]) / 5))
-            o.append(f"<text x='{x0 - 8}' y='{y0 + rowgap + r * (chip + rowgap) + 11}' font-size='11' text-anchor='end' fill='#5e5e5e'>{L}</text>")
-        o.append(f"<text x='{x0 - 40}' y='{y0 + ph / 2}' font-size='12' fill='#5e5e5e' transform='rotate(-90 {x0 - 40} {y0 + ph / 2})' text-anchor='middle'>lightness</text>")
-        for c in range(0, used, 2):
-            o.append(f"<text x='{x0 + gap + c * (chip + gap) + chip / 2}' y='{y0 + ph + 16}' font-size='11' text-anchor='middle' fill='#5e5e5e'>{int(c * P['stepC'] * sc)}</text>")
-        o.append(f"<text x='{x0 + pw / 2}' y='{y0 + ph + 36}' font-size='12' text-anchor='middle' fill='#5e5e5e'>{xl}</text>")
-    o.append(f"<text x='24' y='{H - 30}' font-size='12' fill='#5e5e5e'>Each row sits on the gray of its own lightness. CIE 1931 observer, D65. Both planes pass through</text>")
-    o.append(f"<text x='24' y='{H - 12}' font-size='12' fill='#5e5e5e'>the lightest of the most vivid WLab chips. Screen colors are approximate.</text>")
+            cx, cy = x + gap + c * (chip + gap), y0 + rowgap + r * (chip + rowgap)
+            o.append(f"<path d='M{cx} {cy}H{cx + chip}L{cx} {cy + chip}Z' fill='{hexc(P['rgb_w'][:, i])}'/>")
+            o.append(f"<path d='M{cx + chip} {cy}V{cy + chip}H{cx}Z' fill='{hexc(P['rgb_l'][:, i])}'/>")
+            if not P['ok_l'][i]:
+                o.append(f"<circle cx='{cx + chip * 0.72}' cy='{cy + chip * 0.72}' r='1.8' fill='#000000' fill-opacity='0.55'/>")
+            if i == P['anchor']:
+                o.append(f"<rect x='{cx - 1.5}' y='{cy - 1.5}' width='{chip + 3}' height='{chip + 3}' fill='none' stroke='#1f1f1f' stroke-width='1.5'/>")
+        for c in range(0, u, 2):
+            o.append(f"<text x='{x + gap + c * (chip + gap) + chip / 2}' y='{y0 + ph + 16}' font-size='11' text-anchor='middle' fill='#5e5e5e'>{int(c * P['stepC'])}</text>")
+        o.append(f"<text x='{x + pw / 2}' y='{y0 + ph + 34}' font-size='12' text-anchor='middle' fill='#5e5e5e'>chroma (WLab)</text>")
+        x += pw + sep
+    for L in (10, 30, 50, 70, 90):
+        r = nL - 1 - int(round((L - planes[0]['Lv'][0]) / planes[0]['stepL']))
+        o.append(f"<text x='{x0 - 8}' y='{y0 + rowgap + r * (chip + rowgap) + chip / 2 + 4}' font-size='11' text-anchor='end' fill='#5e5e5e'>{L}</text>")
+    o.append(f"<text x='{x0 - 40}' y='{y0 + ph / 2}' font-size='12' fill='#5e5e5e' transform='rotate(-90 {x0 - 40} {y0 + ph / 2})' text-anchor='middle'>lightness</text>")
+    o.append(f"<text x='24' y='{H - 34}' font-size='12' fill='#5e5e5e'>CIE 1931 observer, D50 (the ICC profile connection space), shown through a Bradford adaptation to sRGB.</text>")
+    o.append(f"<text x='24' y='{H - 16}' font-size='12' fill='#5e5e5e'>Each row sits on the gray of its own lightness. A dot marks a CIELAB half outside sRGB. Screen colors are approximate.</text>")
     o.append('</svg>')
     return '\n'.join(o)
 
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument('hue', type=float, help='WLab hue angle in degrees')
+    ap.add_argument('hues', type=float, nargs='+', help='WLab hue angles in degrees')
+    ap.add_argument('--anchor', choices=('dark', 'light'), default='dark')
     ap.add_argument('--out', default=None)
     a = ap.parse_args()
-    h = int(a.hue) if a.hue == int(a.hue) else a.hue
-    out = a.out or f'../results/hue_plane_{int(a.hue):03d}.svg'
-    P = planes(a.hue)
-    open(out, 'w', encoding='utf8').write(svg(P, h))
-    print(f'wrote {out}; CIELAB hue {P["hab"]:.1f}; chips WLab {P["w"][1].sum()}, CIELAB {P["l"][1].sum()}')
+    out = a.out or '../results/hue_planes_' + '_'.join(f'{int(h):03d}' for h in a.hues) + '.svg'
+    P = [plane(h, a.anchor) for h in a.hues]
+    open(out, 'w', encoding='utf8').write(svg(P, a.anchor))
+    for p in P:
+        g = p['gap'][p['ok_w'] & (p['Cg'] >= 10)]
+        print(f'WLab hue {p["H"]:g}: anchor CIELAB hue {p["hab"]:.1f}; CIELAB hue of the WLab chips '
+              f'(chroma 10 and up) {g.min():+.1f} to {g.max():+.1f} from the anchor')
+    print(f'wrote {out}')

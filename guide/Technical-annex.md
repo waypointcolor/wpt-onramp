@@ -2,7 +2,7 @@
 
 This annex states every equation the guide describes in words, with every constant, so the method can be reproduced without the code. It follows the 2015 Wpt and WLab papers (Derhak and Berns), and the companion package implements each equation in Octave, Python and a spreadsheet; section A.8 says where.
 
-**Conventions.** Spectra are sampled from 380 to 780 nm in 5 nm steps. Wpt depends on the range and interval: the reference coordinates and every result here use this grid, and the base reflectances are interpolated to it (and extrapolated outside their measured range). Color coordinates are column vectors. Angles are in degrees, and hue angles run from 0 to 360. A superscript + is the Moore–Penrose pseudoinverse.
+**Conventions.** Spectra are sampled from 380 to 780 nm in 5 nm steps. Wpt depends on the range and interval: the reference coordinates and every result here use this grid, and the base reflectances are interpolated to it with a cubic spline (and extrapolated outside their measured range). The workbooks take sample reflectances from 380 to 730 nm at 10 nm, interpolate them linearly to the 5 nm grid and hold the 730 nm value beyond it. The CIE tables are those of CIE 15 at 5 nm; the CIE 2015 functions are cut at 780 nm. D50 is computed from the CIE daylight components at 5000 K, as in the original Wpt code, rather than at the CIE's 5003 K; its white differs by less than 0.1 (Z = 82.47 against about 82.5). Color coordinates are column vectors. Angles are in degrees, and hue angles run from 0 to 360. A superscript + is the Moore–Penrose pseudoinverse.
 
 ## A.1 Sensor responses from spectra
 
@@ -38,13 +38,13 @@ The Wpt normalization for one observing condition is a 3 × 3 matrix A, so that
 
 It is built from the responses c\_w of white (A.1), the responses c\_j of the 40 base samples (j = 1 … 40) and their reference coordinates p\_j, t\_j (A.4), in four steps.
 
-**Step 1: rotate white onto the first axis.** With Rᵈ(φ) the rotation by φ in the plane of axes d − 1 and d, rotate first in the plane of axes 2 and 3, then in the plane of axes 1 and 2:
+**Step 1: rotate white onto the first axis.** With Rᵈ(φ) the rotation by φ in the plane of axes d − 1 and d (cos φ at positions (d − 1, d − 1) and (d, d), −sin φ at (d − 1, d), sin φ at (d, d − 1)), rotate first in the plane of axes 2 and 3, then in the plane of axes 1 and 2:
 
 ```latex
 R = R^{(2)}(\varphi_2)\, R^{(3)}(\varphi_3), \quad \varphi_3 = -\operatorname{atan2}(c_{w,3}, c_{w,2}), \quad \varphi_2 = -\operatorname{atan2}(c'_{w,2}, c'_{w,1})
 ```
 
-Here c′\_w = R⁽³⁾(φ₃) c\_w. After R, white lies on the first axis.
+Here c′\_w = R⁽³⁾(φ₃) c\_w. After R, white lies on the first axis. Any other rotation that takes c\_w onto the positive first axis gives the same A, because steps 3 and 4 absorb the difference.
 
 **Step 2: set white to W = 100.**
 
@@ -58,7 +58,7 @@ M_1 = \operatorname{diag}\!\left(\frac{100}{(R\,c_w)_1},\, 1,\, 1\right) R
 M_2 = \begin{bmatrix} 1 & -\alpha_1 & -\alpha_2 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix} M_1
 ```
 
-**Step 4: fit the hue and chroma plane to the reference.** With q\_j the second and third components of M₂ c\_j, collected as the 2 × 40 matrix Q, and P the 2 × 40 matrix of reference (p\_j, t\_j):
+**Step 4: fit the hue and chroma plane to the reference.** With q\_j the second and third components of M₂ c\_j, collected as the 2 × 40 matrix Q, and P the 2 × 40 matrix of reference (p\_j, t\_j), with the columns of Q and P in the same sample order:
 
 ```latex
 F = P\, Q^{+}, \qquad A = \begin{bmatrix} (M_2)_{\text{row }1} \\ F\, (M_2)_{\text{rows }2,3} \end{bmatrix}
@@ -72,7 +72,7 @@ A is linear and invertible, white always maps to (100, 0, 0), and every spectral
 \begin{bmatrix} W \\ p \\ t \end{bmatrix} = a \begin{bmatrix} 100 \\ 0 \\ 0 \end{bmatrix} + b \begin{bmatrix} W_c \\ p_c \\ t_c \end{bmatrix}, \qquad h = \operatorname{atan2}(t_c, p_c)
 ```
 
-Every member of the family has the same hue h, for every a and b, in every observing condition; h itself depends on the condition. WLab keeps the Wpt hue angle (A.5), so the family also shares one WLab hue. CIELAB applies its cube root to X, Y and Z separately, which breaks this: for one blue family (Munsell 5PB 5/6 with its minimum removed, a from 0 to 0.5, b from 0.3 to 1), the CIELAB hue spreads by 0.7° under D65 and 12.5° under illuminant A, while the Wpt hue is constant to 10⁻¹².
+Every member of the family has the same hue h, for every a and b, in every observing condition; h itself depends on the condition. WLab keeps the Wpt hue angle (A.5), so the family also shares one WLab hue. CIELAB applies its cube root to X, Y and Z separately, which breaks this: for one blue family (Munsell 5PB 5/6 with its minimum removed, a from 0 to 0.5, b from 0.3 to 1), the CIELAB hue spreads by 0.7° under D65 and 12.5° under illuminant A, while the Wpt hue is constant to 10⁻¹² (results/annex\_checks.log).
 
 **Where the reference coordinates come from.** The reference p\_j, t\_j were fixed once, under the reference condition (CIE 1931 observer, illuminant C), by the original derivation in the Wpt paper. That derivation rounded the 40 samples onto a circle with an ellipse fit, turned the plane so the vivid yellow (Munsell 3.75Y 8/14) lies along +t with the reds on +p, and scaled the yellow to 100 from the W axis. Every condition, the reference included, now uses step 4 against those fixed values.
 
@@ -131,13 +131,13 @@ The base samples are the Munsell Renotation colors at Value 5 and Chroma 6, one 
 p_{2015} = 1.01125\, p, \qquad t_{2015} = t - 0.01331\, p
 ```
 
-Applying this map to the reference coordinates reproduces the published matrices. White, the W axis and the vivid yellow at t = 100 are the same in both, and both sets of 40 samples are equally round (chroma varies by about 4.4%). WLab values computed with the published matrices differ by at most 0.7 ΔE(WLab), mean 0.2, over 1,600 Munsell samples under D50 and D65. MATs and observer conversions are identical with either reference, because the map cancels between source and destination.
+Applying this map to the reference coordinates reproduces the published matrices. White, the W axis and the vivid yellow at t = 100 are the same in both, and both sets of 40 samples are equally round (under the reference condition their chroma runs from 25.6 to 30.3, a standard deviation of about 4.5% of the mean). WLab values computed with the published matrices differ by at most 0.7 ΔE(WLab), mean 0.2, over 1,600 Munsell samples under D50 and D65 (results/annex\_checks.log). MATs and observer conversions are identical with either reference, because the map cancels between source and destination.
 
 ## A.5 WLab, forward and inverse
 
 These are the equations of the WLab paper's appendix. Both directions use the same lightness and hue terms, so WLab converts back to Wpt exactly.
 
-**Constants.** The implementations use the full-precision values; the paper prints them rounded. Over 1,600 Munsell samples (CIE 1931, D65) the rounded values change WLab by at most 0.05, mean 0.01.
+**Constants.** The implementations use the full-precision values; the paper prints them rounded. Over 1,600 Munsell samples (CIE 1931, D65) the rounded values change WLab by at most 0.05, mean 0.01 (results/annex\_checks.log).
 
 | Constant | Value used | Published |
 | --- | --- | --- |
@@ -201,7 +201,7 @@ and p = c\_pt cos h, t = c\_pt sin h.
 \Delta E_{WLab} = \sqrt{(L_{w,1} - L_{w,2})^2 + (a_{w,1} - a_{w,2})^2 + (b_{w,1} - b_{w,2})^2}
 ```
 
-The two WLab values may come from different observing conditions, since every condition goes through Wpt. ΔE(WLab) is a material color difference; it corresponds to perceived color differences under a reference observing condition, as CIELAB-based formulas do. In the WLab paper's STRESS tests (RIT-DuPont and Alder data, CIE 1964 (10°) observer under D65 and illuminant A) it was not statistically different from ΔE94, ΔE00, DIN99o or CAM02-UCS.
+The two WLab values may come from different observing conditions, since every condition goes through Wpt. ΔE(WLab) is a material color difference; it corresponds to perceived color differences under a reference observing condition, as CIELAB-based formulas do. In the WLab paper's tests against two datasets from color-difference assessment experiments (CIE 1964 (10°) observer under D65 and illuminant A), it was not statistically different from ΔE94, ΔE00, DIN99o or CAM02-UCS. For large differences, the paper compared each space's lightness, chroma and hue with Munsell Value, Chroma and Hue over the Munsell colors (its Fig. 7): WLab tracks the Munsell system about as closely as CIELAB and CAM02-UCS do.
 
 ## A.7 Material adjustment transforms and observer conversion
 
@@ -219,7 +219,7 @@ White maps exactly: M c\_w,src = c\_w,dst. For other materials the result is a p
 \mathbf{C}'(\lambda) = M_{src \rightarrow dst}\, \mathbf{C}_{src}(\lambda)
 ```
 
-where **C**(λ) is the column of the three sensitivities at λ. Source and destination share the illuminant here. When the two observers are invertible linear transforms of each other, as cone fundamentals and color-matching functions of the same observer are, M equals that transform and the conversion is exact (to about 10⁻¹³ in the companion package). Between different observers it is the best fit for typical materials.
+where **C**(λ) is the column of the three sensitivities at λ. Source and destination share the illuminant here. When the two observers are invertible linear transforms of each other, as cone fundamentals and color-matching functions of the same observer are, M equals that transform and the conversion is exact (to about 10⁻¹³ in the companion package). Between different observers it is a close fit for typical materials.
 
 **For comparison, a CAT.** The von Kries-type CATs used in the companion package scale responses in a space S by the ratio of the two whites, with full adaptation:
 
@@ -250,4 +250,4 @@ S_{Bradford} = \begin{bmatrix} 0.8951 & 0.2664 & -0.1614 \\ -0.7502 & 1.7135 & 0
 | A.6 ΔE(WLab) | ex02, ex06 | delta\_e\_wlab | Calculator: ΔE(WLab) |
 | A.7 MAT, CAT | ex05\_mats.m | mat | MAT sheet |
 
-The three implementations agree to within 3 × 10⁻¹⁰ on the Wpt matrices and the spreadsheet, and to within 10⁻⁷ on WLab for 1,600 Munsell samples (the logs are in the package's results folder).
+The three implementations agree to within 10⁻⁹ on the Wpt matrices and the spreadsheets, and to within 10⁻⁷ on WLab for 1,600 Munsell samples (the logs are in the package's results folder). Numbers in this annex that no example prints come from python/annex\_checks.py.
