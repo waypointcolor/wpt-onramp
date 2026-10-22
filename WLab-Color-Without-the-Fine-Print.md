@@ -24,9 +24,9 @@ For readers who want the full method, every equation and constant is written out
 ## The short version
 
 - A CIELAB value describes a sample under one light, as one standard viewer sees it. Change the light or the viewer and the value changes, by a different amount for each sample.
-- That is why two samples that match in the viewing booth can stop matching in the store. The name for it is metamerism.
+- That is why two samples that match in the viewing booth (a cabinet lit by one standard light, where colors are checked) can stop matching in the store. The name for it is metamerism.
 - Wpt and WLab are coordinates for the material itself: for typical materials they stay nearly the same whatever the light and whoever is looking, and how far a material does move is useful information in itself. WLab differences are designed to be similar in size to familiar ΔE values.
-- With them you can ask questions a booth reading cannot answer. Will this match hold under store lighting? Does this ink hold its color? Do these two viewers, or a camera and a person, agree?
+- With them you can ask questions that a check under the booth's one light cannot answer. Will this match hold under store lighting? Does this ink hold its color? Do these two viewers, or a camera and a person, agree?
 - A material adjustment transform (MAT) carries measurements from one light and/or viewer to another by way of the material.
 - Keep CIELAB and ΔE<sub>00</sub> for work under one light and for contracts. Reach for WLab when a comparison crosses lights, viewers or devices.
 
@@ -310,7 +310,7 @@ If everything happens under one light for one standard observer, CIELAB and ΔE<
 
 ## For buyers and managers
 
-You will rarely compute WLab yourself. As with ΔE today, you ask for it, read it and decide. What it adds is the question a booth ΔE cannot answer: will this match hold where the product is actually seen?
+You will rarely compute WLab yourself. As with ΔE today, you ask for it, read it and decide. What it adds is the question a ΔE measured for the booth cannot answer: will this match hold where the product is actually seen?
 
 **A story.** A brand owner approves a red. Two suppliers submit matches, and both measure ΔE<sub>00</sub> 0.0 against the standard in the D50 viewing booth. Both pass. A WLab robustness report then compares each submission with the standard under the other lights the product will meet:
 
