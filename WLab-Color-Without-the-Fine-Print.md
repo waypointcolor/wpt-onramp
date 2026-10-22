@@ -2,7 +2,7 @@
 
 ### An Onramp to Material Color Equivalency
 
-Maxim W. Derhak — October 22, 2026
+Maxim W. Derhak (PhD) — October 22, 2026
 
 ## Why this guide exists
 
