@@ -6,7 +6,7 @@ Maxim W. Derhak (PhD) — October 22, 2026
 
 ## Why this guide exists
 
-This guide is an onramp to a different way of describing color: by the *material* (a paint, an ink, a fabric, a plastic) rather than by how it measures under one light for one viewer. It ends at two coordinate systems, Wpt (pronounced "Waypoint") and WLab, introduced properly once the groundwork is in place.
+This guide is an onramp to a different way of describing color: by the *material* (a paint, an ink, a fabric, a plastic) rather than by how it measures under one light for one viewer. It ends at two coordinate systems: Wpt (pronounced "Waypoint"), which describes the material, and WLab (Waypoint Lab), which reshapes Wpt so that distances read like familiar ΔE color differences. Both are introduced properly once the groundwork is in place.
 
 Most people who work with color are at least familiar with the CIELAB color coordinate system and the ΔE color difference score. Both are good tools. But they answer a narrower question than most people think. This guide shows what that question is and what Wpt and WLab add.
 
@@ -17,8 +17,8 @@ For readers who want the full method, every equation and constant is written out
 **Pick your path**
 
 - New to color numbers: read straight through.
-- Comfortable with Lab and ΔE: skim "What you may already know", then read on from "The three ingredients of every color".
-- Buying or managing color: read "A material does not have one Lab value", then "For buyers and managers".
+- Comfortable with CIELAB and ΔE: skim "What you may already know", then read on from "The three ingredients of every color".
+- Buying or managing color: read "A material does not have one CIELAB value", then "For buyers and managers".
 - Want to use it now: read "When to reach for Wpt and WLab", then "Getting started".
 
 ## The short version
@@ -36,17 +36,19 @@ The rest of this guide explains each of these, with a worked example.
 
 A CIELAB value is the color of a sample as one standard viewer sees it under one named light. Everything else in this guide builds on that one sentence.
 
-CIELAB gives each color three numbers:
+CIELAB (often just called Lab) gives each color three numbers:
 
 - **L\*** is lightness, from 0 (black) to 100 (white).
 - **a\*** runs from green (negative) to red (positive).
 - **b\*** runs from blue (negative) to yellow (positive).
 
+The same color can also be given in polar form: its **chroma** C\*<sub>ab</sub>, how far it sits from gray (how colorful it is), and its **hue angle** h<sub>ab</sub>, the direction around the gray axis in degrees (0° toward red, 90° toward yellow).
+
 **ΔE** is how far apart two colors sit in that space. ΔE\*<sub>ab</sub> is the plain straight-line distance. CIEDE2000 (ΔE<sub>00</sub>) adds corrections for regions where the straight line gets it wrong, such as blues and near-neutrals. As a rough guide, a ΔE<sub>00</sub> near 1 is a difference a trained eye can just see side by side.
 
 **Lights and illuminants.** Color calculations often do not use a real light source. Instead, they use an *illuminant*: a written specification of an idealized light, giving how much power it has at each wavelength. The CIE publishes the common ones. D50 and D65 stand for daylight (D50 is used in printing, D65 in most other work), and illuminant A stands for an incandescent bulb, the traditional kind with a tungsten filament.
 
-**How a Lab value is made**
+**How a CIELAB value is made**
 
 1. Measure the sample's spectral reflectance: how much light it reflects at each wavelength.
 2. Choose an observer (the CIE 2° or 10° standard observer) and an illuminant (often D50 or D65).
@@ -56,11 +58,11 @@ CIELAB gives each color three numbers:
 
 **The assumptions behind it**
 
-- **The light is fixed.** A value marked "D50, 2°" holds for D50 only. Under an incandescent bulb the sample has a different Lab value.
+- **The light is fixed.** A value marked "D50, 2°" holds for D50 only. Under an incandescent bulb the sample has a different CIELAB value.
 - **The viewer is an average.** The standard observers are averages from color-matching experiments run in the 1920s to 1950s. No real person matches them exactly, and no camera does.
 - **Dividing by white only lines up the neutrals.** Step 4 makes white and grays agree from one light to the next. It does not do the same for reds, greens or blues.
 
-These three assumptions are the fine print on every Lab value. None of them is a flaw when you stay in one condition; they matter as soon as you compare across lights or viewers, which real work keeps doing.
+These three assumptions are the fine print on every CIELAB value. None of them is a flaw when you stay in one condition; they matter as soon as you compare across lights or viewers, which real work keeps doing.
 
 ## The three ingredients of every color
 
@@ -76,9 +78,9 @@ Each of the observer's three responses is built up wavelength by wavelength: how
 
 **An analogy.** Think of the material as a song, the light as the room it is played in and the observer as the listener's ears. A CIELAB value is a recording of what one standard listener heard in one room. The rest of this guide is about writing down the song itself, as far as three numbers can.
 
-## A material does not have one Lab value
+## A material does not have one CIELAB value
 
-Many people believe a swatch *is* its Lab value. It is not. A Lab value describes one swatch under one light for one observer, and changing the light or the observer changes it, by a different amount for each swatch.
+Many people believe a swatch *is* its CIELAB value. It is not. A CIELAB value describes one swatch under one light for one observer, and changing the light or the observer changes it, by a different amount for each swatch.
 
 Three everyday effects come out of this:
 
@@ -167,9 +169,9 @@ Practical Wpt keeps that reference and lets you choose which materials carry it 
 
 ## WLab: measuring difference between materials
 
-WLab (Waypoint-Lab) reshapes Wpt so that a plain straight-line distance works as a color difference, comparable to the leading ΔE formulas. Another way to see it: every Wpt normalization predicts what the reference observer (CIE 1931, under illuminant C) would see for the same material. So a ΔE<sub>WLab</sub> is, in effect, the color difference that observer would judge between the two materials under illuminant C, wherever they were measured. The prediction is close, not exact: the reference observer may see a material slightly differently under illuminant C, and that difference is metamerism between the two observing conditions (observer and light). WLab has fine print too: a reference observer under illuminant C, and a prediction that is close but not exact. But it is the same fine print for every light and every viewer. WLab is not a color appearance space. It is to Wpt what CIELAB is to XYZ.
+WLab (Waypoint Lab) reshapes Wpt so that a plain straight-line distance works as a color difference, comparable to the leading ΔE formulas. Another way to see it: every Wpt normalization predicts what the reference observer (CIE 1931, under illuminant C) would see for the same material. So a ΔE<sub>WLab</sub> is, in effect, the color difference that observer would judge between the two materials under illuminant C, wherever they were measured. The prediction is close, not exact: the reference observer may see a material slightly differently under illuminant C, and that difference is metamerism between the two observing conditions (observer and light). WLab has fine print too: a reference observer under illuminant C, and a prediction that is close but not exact. But it is the same fine print for every light and every viewer. WLab is not a color appearance space. It is to Wpt what CIELAB is to XYZ.
 
-WLab has three coordinates, L<sub>w</sub>, a<sub>w</sub> and b<sub>w</sub>, read like L\*, a\* and b\*. The difference between two colors, ΔE<sub>WLab</sub>, is just the straight-line distance between them, as ΔE\*<sub>ab</sub> is in CIELAB.
+WLab has three coordinates, L<sub>w</sub>, a<sub>w</sub> and b<sub>w</sub> (the w stands for WLab), read like L\*, a\* and b\*. Despite its name, WLab is not a version of CIELAB: it is built on Wpt, and "Lab" only says that its three numbers read the same way. WLab has a polar form too: lightness L<sub>w</sub>, chroma c<sub>w</sub> and hue angle h<sub>w</sub>, and its hue angle is the Wpt hue angle, unchanged. The difference between two colors, ΔE<sub>WLab</sub>, is just the straight-line distance between them, as ΔE\*<sub>ab</sub> is in CIELAB.
 
 **What the transform does, in words (optional reading)**
 
@@ -183,7 +185,7 @@ Each step can be undone, so WLab converts back to Wpt exactly. The equations tak
 
 **What a WLab difference means.** Because every WLab value goes through Wpt, a ΔE<sub>WLab</sub> is a difference between *materials*, not between two appearances. Values from different lights and observers share one common representation, so you can compare materials as each condition records them, the way prices compare once they're all in the same currency. That includes custom observers, not only the CIE standard ones: the CIE 2006 observers for a given age and field size, the CIE 2015 observers, or a camera's sensor curves. Build the Wpt normalization for that observer and light, and its WLab values join the same representation. That lets us finish the Purplish Blue example.
 
-**The example, revisited.** Here are the same two Purplish Blue patches from "A material does not have one Lab value", now in WLab.
+**The example, revisited.** Here are the same two Purplish Blue patches from "A material does not have one CIELAB value", now in WLab.
 
 | Purplish Blue | Real ColorChecker patch (smooth spectrum) | MetaChecker twin (jagged spectrum) |
 | --- | --- | --- |
@@ -328,7 +330,7 @@ All values are ΔE<sub>WLab</sub> against the standard, CIE 1931 observer, excep
 
 **What to ask for**
 
-- Spectral reflectance of the standard and of each submission or production sample, not just Lab values: ideally 380–730 nm every 10 nm, the grid the robustness workbook uses (data that start at 400 nm can be extended by repeating the 400 nm value).
+- Spectral reflectance of the standard and of each submission or production sample, not just CIELAB values: ideally 380–730 nm every 10 nm, the grid the robustness workbook uses (data that start at 400 nm can be extended by repeating the 400 nm value).
 - The lights that matter for the product: the viewing booth, the store lighting and home lighting. For the booth and for a particular store light, its measured spectrum: a "D50" booth only approximates D50.
 - A robustness report: ΔE<sub>WLab</sub> between each sample and the standard under each of those lights, and for a second observer if viewers of different ages matter.
 
@@ -405,7 +407,7 @@ The companion package will be published as a public Git repository.
 | Wpt (Waypoint) | Material coordinates: W linear lightness (like Y), p red–green, t yellow–blue |
 | Wpt normalization | The basic math steps, worked out for each observing condition, that turn an observer's three responses into Wpt |
 | Wpt shift manifold | The cloud of Wpt points one material makes across many conditions |
-| WLab (Waypoint-Lab) | Wpt reshaped so straight-line distance works as a color difference |
+| WLab (Waypoint Lab) | Wpt reshaped so straight-line distance works as a color difference |
 
 ## Further reading
 
@@ -435,7 +437,7 @@ $$
 c_i = k \sum_{\lambda} C_i(\lambda)\, O(\lambda)\, L(\lambda), \qquad k = \frac{100}{\sum_{\lambda} C_2(\lambda)\, L(\lambda)}
 $$
 
-The constant k makes the second response of a perfect white equal 100, which for XYZ is the usual Y = 100. Any other constant gives the same Wpt, because steps 2 and 4 of the normalization (A.3) rescale the lightness axis and the chromatic plane. The responses of a perfect white, O(λ) = 1, are written $c_{w}$.
+The constant k makes the second response of a perfect white equal 100, which for XYZ is the usual Y = 100. Any other constant gives the same Wpt, because steps 2 and 4 of the normalization (A.3) rescale the lightness axis and the chromatic plane. The responses of a perfect white, O(λ) = 1, are written $c_n$, as the CIE writes the white's $X_n$, $Y_n$, $Z_n$ (A.2).
 
 ### A.2 CIELAB and ΔE<sub>00</sub>
 
@@ -459,20 +461,20 @@ $$
 \begin{bmatrix} W \\ p \\ t \end{bmatrix} = A\, c
 $$
 
-It is built from the responses $c_{w}$ of white (A.1), the responses $c_{j}$ of the 40 base samples (j = 1 … 40) and their reference coordinates $p_{j}$, $t_{j}$ (A.4), in four steps.
+It is built from the responses $c_n$ of white (A.1), the responses $c_{j}$ of the 40 base samples (j = 1 … 40) and their reference coordinates $p_{j}$, $t_{j}$ (A.4), in four steps.
 
 **Step 1: rotate white onto the first axis.** With $R^{(d)}(\varphi)$ the rotation by φ in the plane of axes d − 1 and d (cos φ at positions (d − 1, d − 1) and (d, d), −sin φ at (d − 1, d), sin φ at (d, d − 1)), rotate first in the plane of axes 2 and 3, then in the plane of axes 1 and 2:
 
 $$
-R = R^{(2)}(\varphi_2)\, R^{(3)}(\varphi_3), \quad \varphi_3 = -\operatorname{atan2}(c_{w,3}, c_{w,2}), \quad \varphi_2 = -\operatorname{atan2}(c'_{w,2}, c'_{w,1})
+R = R^{(2)}(\varphi_2)\, R^{(3)}(\varphi_3), \quad \varphi_3 = -\operatorname{atan2}(c_{n,3}, c_{n,2}), \quad \varphi_2 = -\operatorname{atan2}(c'_{n,2}, c'_{n,1})
 $$
 
-Here $c'_w = R^{(3)}(\varphi_3)\, c_w$. After R, white lies on the first axis. Any other rotation that takes $c_{w}$ onto the positive first axis gives the same A, because steps 3 and 4 absorb the difference.
+Here $c'_n = R^{(3)}(\varphi_3)\, c_n$. After R, white lies on the first axis. Any other rotation that takes $c_n$ onto the positive first axis gives the same A, because steps 3 and 4 absorb the difference.
 
 **Step 2: set white to W = 100.**
 
 $$
-M_1 = \operatorname{diag}\!\left(\frac{100}{(R\,c_w)_1},\, 1,\, 1\right) R
+M_1 = \operatorname{diag}\!\left(\frac{100}{(R\,c_n)_1},\, 1,\, 1\right) R
 $$
 
 **Step 3: level the lightness.** With $(u_j, v_j, z_j) = M_1 c_j$, fit $u_j \approx \alpha_1 v_j + \alpha_2 z_j + \alpha_0$ by least squares, then shear so the 40 samples of equal Munsell Value share one W:
@@ -492,10 +494,10 @@ A is linear and invertible, white always maps to (100, 0, 0), and every spectral
 **Constant hue for a reflectance family.** Write a reflectance as a spectrally flat part a plus a scale b > 0 on a characteristic reflectance $O_{c}$, so O(λ) = a + b $O_{c}$(λ). Because A is linear and white maps to (100, 0, 0):
 
 $$
-\begin{bmatrix} W \\ p \\ t \end{bmatrix} = a \begin{bmatrix} 100 \\ 0 \\ 0 \end{bmatrix} + b \begin{bmatrix} W_c \\ p_c \\ t_c \end{bmatrix}, \qquad h = \operatorname{atan2}(t_c, p_c)
+\begin{bmatrix} W \\ p \\ t \end{bmatrix} = a \begin{bmatrix} 100 \\ 0 \\ 0 \end{bmatrix} + b \begin{bmatrix} W_c \\ p_c \\ t_c \end{bmatrix}, \qquad h_{pt} = \operatorname{atan2}(t_c, p_c)
 $$
 
-Every member of the family has the same hue h, for every a and b, in every observing condition; h itself depends on the condition. WLab keeps the Wpt hue angle (A.5), so the family also shares one WLab hue. CIELAB applies its cube root to X, Y and Z separately, which breaks this: for one blue family (Munsell 5PB 5/6 with its minimum removed, a from 0 to 0.5, b from 0.3 to 1), the CIELAB hue spreads by 0.7° under D65 and 12.5° under illuminant A, while the Wpt hue is constant to 10⁻¹² (`results/annex_checks.log`).
+Every member of the family has the same hue $h_{pt}$, for every a and b, in every observing condition; $h_{pt}$ itself depends on the condition. WLab keeps the Wpt hue angle (A.5), so the family also shares one WLab hue. CIELAB applies its cube root to X, Y and Z separately, which breaks this: for one blue family (Munsell 5PB 5/6 with its minimum removed, a from 0 to 0.5, b from 0.3 to 1), the CIELAB hue spreads by 0.7° under D65 and 12.5° under illuminant A, while the Wpt hue is constant to 10⁻¹² (`results/annex_checks.log`).
 
 **Where the reference coordinates come from.** The reference $p_{j}$, $t_{j}$ were fixed once, under the reference condition (CIE 1931 observer, illuminant C), by the original derivation in the Wpt paper. That derivation rounded the 40 samples onto a circle with an ellipse fit, turned the plane so the vivid yellow (Munsell 3.75Y 8/14) lies along +t with the reds on +p, and scaled the yellow to 100 from the W axis. Every condition, the reference included, now uses step 4 against those fixed values.
 
@@ -579,7 +581,7 @@ $$
 2. Chroma and hue of Wpt:
 
 $$
-c_{pt} = \sqrt{p^2 + t^2}, \qquad h = \operatorname{atan2}(t, p) \in [0, 360)
+c_{pt} = \sqrt{p^2 + t^2}, \qquad h_{pt} = \operatorname{atan2}(t, p) \in [0, 360)
 $$
 
 3. Lightness dependence of chroma:
@@ -591,7 +593,7 @@ $$
 4. Hue terms:
 
 $$
-r_1 = \begin{cases} \sin^3(h - 1) & 1 < h < 181 \\ 0 & \text{otherwise} \end{cases}, \quad r_2 = \begin{cases} 0.39 \cos^2(h - 14) & 104 < h < 284 \\ 0 & \text{otherwise} \end{cases}
+r_1 = \begin{cases} \sin^3(h_{pt} - 1) & 1 < h_{pt} < 181 \\ 0 & \text{otherwise} \end{cases}, \quad r_2 = \begin{cases} 0.39 \cos^2(h_{pt} - 14) & 104 < h_{pt} < 284 \\ 0 & \text{otherwise} \end{cases}
 $$
 
 $$
@@ -601,22 +603,22 @@ $$
 5. Chroma:
 
 $$
-C_w = d_0 \left[ \ln\!\left(\frac{c_{mod}}{80} + d_1\right) - \ln d_1 \right]
+c_w = d_0 \left[ \ln\!\left(\frac{c_{mod}}{80} + d_1\right) - \ln d_1 \right]
 $$
 
-6. Cartesian form: $a_{w}$ = $C_{w}$ cos h, $b_{w}$ = $C_{w}$ sin h. WLab is ($L_{w}$, $a_{w}$, $b_{w}$); the hue angle h is unchanged from Wpt.
+6. Cartesian form: $a_w = c_w \cos h_w$, $b_w = c_w \sin h_w$, with $h_w = h_{pt}$: WLab keeps the Wpt hue angle. WLab is ($L_w$, $a_w$, $b_w$).
 
-**WLab to Wpt.** Take $C_{w}$ and h from $a_{w}$ and $b_{w}$, compute $d_0$, $d_1$ from h and s from $L_{w}$ as above, then:
+**WLab to Wpt.** Take $c_w$ and $h_w$ from $a_w$ and $b_w$, set $h_{pt} = h_w$, compute $d_0$, $d_1$ from $h_{pt}$ and s from $L_{w}$ as above, then:
 
 $$
-c_{mod} = 80 \left[ e^{\,C_w / d_0 + \ln d_1} - d_1 \right], \qquad c_{pt} = s\, c_{mod}
+c_{mod} = 80 \left[ e^{\,c_w / d_0 + \ln d_1} - d_1 \right], \qquad c_{pt} = s\, c_{mod}
 $$
 
 $$
 v = \frac{L_w + 16}{116}, \qquad W = \begin{cases} 100\, v^3 & v > 6/29 \\ 300 \left(\tfrac{6}{29}\right)^2 \left(v - \tfrac{4}{29}\right) & \text{otherwise} \end{cases}
 $$
 
-and p = $c_{\mathrm{pt}}$ cos h, t = $c_{\mathrm{pt}}$ sin h.
+and $p = c_{pt} \cos h_{pt}$, $t = c_{pt} \sin h_{pt}$.
 
 ### A.6 ΔE<sub>WLab</sub>
 
@@ -624,7 +626,7 @@ $$
 \Delta E_{\mathrm{WLab}} = \sqrt{(L_{w,1} - L_{w,2})^2 + (a_{w,1} - a_{w,2})^2 + (b_{w,1} - b_{w,2})^2}
 $$
 
-The two WLab values may come from different observing conditions, since every condition goes through Wpt. ΔE<sub>WLab</sub> is a material color difference. For responses $c$ in any condition, $A\,c = A_{\mathrm{ref}}\,(A_{\mathrm{ref}}^{-1} A\,c)$, and $A_{\mathrm{ref}}^{-1} A\,c$ is the MAT's prediction of the reference responses (A.7): Wpt in any condition is the reference condition's Wpt of what the reference observer (CIE 1931) is predicted to see under illuminant C. A ΔE<sub>WLab</sub> therefore estimates the color difference that observer would judge between the two materials under illuminant C. The estimate is approximate: what the reference observer actually sees for a material under illuminant C can differ from the prediction, and that difference is the material's observing-condition (observer + illuminant) metamerism between the two conditions, the color inconstancy of A.7. In the WLab paper's tests against two datasets from color-difference assessment experiments (CIE 1964 (10°) observer under D65 and illuminant A), it was not statistically different from ΔE<sub>94</sub>, ΔE<sub>00</sub>, DIN99o or CAM02-UCS. For large differences, the paper compared each space's lightness, chroma and hue with Munsell Value, Chroma and Hue over the Munsell colors (its Fig. 7): WLab tracks the Munsell system about as closely as CIELAB and CAM02-UCS do.
+The two WLab values may come from different observing conditions, since every condition goes through Wpt. ΔE<sub>WLab</sub> (written ΔE<sub>w</sub> in the WLab paper and in the thesis) is a material color difference. For responses $c$ in any condition, $A\,c = A_{\mathrm{ref}}\,(A_{\mathrm{ref}}^{-1} A\,c)$, and $A_{\mathrm{ref}}^{-1} A\,c$ is the MAT's prediction of the reference responses (A.7): Wpt in any condition is the reference condition's Wpt of what the reference observer (CIE 1931) is predicted to see under illuminant C. A ΔE<sub>WLab</sub> therefore estimates the color difference that observer would judge between the two materials under illuminant C. The estimate is approximate: what the reference observer actually sees for a material under illuminant C can differ from the prediction, and that difference is the material's observing-condition (observer + illuminant) metamerism between the two conditions, the color inconstancy of A.7. In the WLab paper's tests against two datasets from color-difference assessment experiments (CIE 1964 (10°) observer under D65 and illuminant A), it was not statistically different from ΔE<sub>94</sub>, ΔE<sub>00</sub>, DIN99o or CAM02-UCS. For large differences, the paper compared each space's lightness, chroma and hue with Munsell Value, Chroma and Hue over the Munsell colors (its Fig. 7): WLab tracks the Munsell system about as closely as CIELAB and CAM02-UCS do.
 
 ### A.7 Material adjustment transforms and observer conversion
 
@@ -634,7 +636,7 @@ $$
 M_{src \rightarrow dst} = A_{dst}^{-1} A_{src}, \qquad c_{dst} \approx M_{src \rightarrow dst}\; c_{src}
 $$
 
-White maps exactly: $M\,c_{w,\mathrm{src}} = c_{w,\mathrm{dst}}$. For other materials the result is a prediction; what is left over is their color inconstancy between the two conditions.
+White maps exactly: $M\,c_{n,\mathrm{src}} = c_{n,\mathrm{dst}}$. For other materials the result is a prediction; what is left over is their color inconstancy between the two conditions.
 
 **Observer conversion.** Applied to the sensitivity functions themselves, at every wavelength, the same matrix gives a new set of functions that respond to materials as the destination observer does:
 
@@ -647,7 +649,7 @@ where **C**(λ) is the column of the three sensitivities at λ. Source and desti
 **For comparison, a CAT.** The von Kries-type CATs used in the companion package scale responses in a space S by the ratio of the two whites, with full adaptation:
 
 $$
-M_{CAT} = S^{-1} \operatorname{diag}\!\left( \frac{S\, c_{w,dst}}{S\, c_{w,src}} \right) S
+M_{CAT} = S^{-1} \operatorname{diag}\!\left( \frac{S\, c_{n,dst}}{S\, c_{n,src}} \right) S
 $$
 
 with S the Bradford or CAT02 matrix, or the identity for plain white scaling in XYZ. A CAT models one viewer adapting, so it is not designed to bridge two different observers.
