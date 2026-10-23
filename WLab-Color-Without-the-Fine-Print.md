@@ -381,7 +381,7 @@ If you can compute CIELAB from a spectrum, you can compute WLab: it is one extra
 - **Robustness report in a browser.** `WLab-robustness-report.html`, in the companion package, makes the table in "For buyers and managers" from pasted spectra, with your own lights if you like. It is a single page that opens with a double-click, needs nothing installed and sends nothing anywhere. It is built on `wlab`, an implementation of Wpt, WLab and MATs in TypeScript for developers who want them in their own web tools.
 - **iccMAX.** The open-source [iccDEV](https://github.com/InternationalColorConsortium/iccDEV) tools build and apply profiles that carry a Wpt MAT for custom observers.
 
-The companion package is at [github.com/maxderhak/wpt-onramp](https://github.com/maxderhak/wpt-onramp). Its web page, with the short version of this guide, the metamerism demo and the hue experiment, is at [maxderhak.github.io/wpt-onramp](https://maxderhak.github.io/wpt-onramp/), and `wlab` is at [github.com/maxderhak/wlab](https://github.com/maxderhak/wlab).
+The companion package is at [github.com/waypointcolor/wpt-onramp](https://github.com/waypointcolor/wpt-onramp). Its web page, with the short version of this guide, the metamerism demo and the hue experiment, is at [waypointcolor.github.io/wpt-onramp](https://waypointcolor.github.io/wpt-onramp/), and `wlab` is at [github.com/waypointcolor/wlab](https://github.com/waypointcolor/wlab).
 
 ## Glossary
 
@@ -426,7 +426,7 @@ Read in this order: each one assumes the one before it.
 6. **The full treatment.** Derhak MW. *Spectrally Based Material Color Equivalency: Modeling and Manipulation.* PhD dissertation, Rochester Institute of Technology, 2015.
 7. **Practical Wpt (in preparation).** Two papers on building Wpt from real-world reflectances, converting custom observers, and working from camera and display measurements alone.
 
-Code and spreadsheets: the companion package described under "Getting started", [github.com/maxderhak/wpt-onramp](https://github.com/maxderhak/wpt-onramp).
+Code and spreadsheets: the companion package described under "Getting started", [github.com/waypointcolor/wpt-onramp](https://github.com/waypointcolor/wpt-onramp).
 
 ## Technical annex: the equations behind Wpt and WLab
 

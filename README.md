@@ -11,9 +11,9 @@ samples, are in the guide's **Technical annex**; its section A.8 maps each equat
 that implements it here.
 
 - **The guide:** [WLab-Color-Without-the-Fine-Print.pdf](WLab-Color-Without-the-Fine-Print.pdf), with the Technical annex at the end (also readable here as [Markdown](WLab-Color-Without-the-Fine-Print.md))
-- **The web page:** [index.html](index.html), the short version and two interactive demos, online at [maxderhak.github.io/wpt-onramp](https://maxderhak.github.io/wpt-onramp/) (or download it and open it)
-- **The robustness report in a browser:** [WLab-robustness-report.html](WLab-robustness-report.html), online at [maxderhak.github.io/wpt-onramp/WLab-robustness-report.html](https://maxderhak.github.io/wpt-onramp/WLab-robustness-report.html) (or download it and open it; nothing to install)
-- **The TypeScript implementation:** [wlab](https://github.com/maxderhak/wlab), which both web pages are built on
+- **The web page:** [index.html](index.html), the short version and two interactive demos, online at [waypointcolor.github.io/wpt-onramp](https://waypointcolor.github.io/wpt-onramp/) (or download it and open it)
+- **The robustness report in a browser:** [WLab-robustness-report.html](WLab-robustness-report.html), online at [waypointcolor.github.io/wpt-onramp/WLab-robustness-report.html](https://waypointcolor.github.io/wpt-onramp/WLab-robustness-report.html) (or download it and open it; nothing to install)
+- **The TypeScript implementation:** [wlab](https://github.com/waypointcolor/wlab), which both web pages are built on
 
 ## What is here
 
