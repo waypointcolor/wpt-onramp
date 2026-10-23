@@ -14,6 +14,9 @@ All spectral data run from 380 to 780 nm in 5 nm steps unless noted.
 | `toolbox/wpt_base_munsell40.csv` | The 40 Munsell colors of Value 5 and Chroma 6 that carry the Wpt normalization (from the same set) | See below |
 | `toolbox/wpt_reference_pt.csv` | Their reference p and t (CIE 1931 2° observer, illuminant C) | The Wpt toolbox (`getWptStruct.m`); the guide's Technical annex (A.4) says how they relate to the 2015 Wpt paper |
 | `results/example_white_LED_made_up.csv` | A made-up white LED (a blue peak and two broad phosphor bands, Gaussian), the example custom light | Made for this package; its own data |
+| `index.html` | The same tables, built into the landing page, and its demo data: the two PMCC pairs below, the buyer example and the made-up LED | Built from the same tables by the `wlab` TypeScript package |
+| `WLab-robustness-report.html` | The CIE observers and illuminants and the Munsell base set above, built into the page, and the buyer example spectra | Built from the same tables by the `wlab` TypeScript package |
+| `results/pmcc_smurf_twin.csv`, `results/pmcc_unitary_blue_twin.csv` | Two blues, each with its twin: the Smurf and Unitary Blue patches of a Preferred Memory Colour Chart (PMCC; M. R. Luo, "The new preferred memory color (PMC) chart," *Color Research & Application* 49(6), 564-576 (2024), DOI [10.1002/col.22940](https://doi.org/10.1002/col.22940)), measured by Maxim W. Derhak from 380 to 730 nm at 10 nm (interpolated here to 5 nm, the 730 nm value held to 780 nm), and for each a twin that matches it exactly for the CIE 1931 observer under D65 | The measurement: Maxim W. Derhak; the twins made by `python/make_pmcc_twin.py`; this package's own data |
 | `results/buyer_example_spectra.csv` | A brand red (Munsell 5R 5/6) and two made-up submissions that match it exactly in a D50 booth, 380 to 730 nm at 10 nm | Made by `python/make_buyer_example.py` from the Munsell base set; this package's own data |
 
 ## Licenses
@@ -21,7 +24,7 @@ All spectral data run from 380 to 780 nm in 5 nm steps unless noted.
 The CIE publishes its colorimetric data tables as open datasets under the [Creative Commons
 Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0)](https://creativecommons.org/licenses/by-sa/4.0/).
 The files above that hold CIE data, or are calculated from it (`spectral_tables_380_780_5.csv`,
-`wpt_matrices.csv`, and the CIE data on the workbooks' Tables, Weights and Matrices sheets), are
+`wpt_matrices.csv`, `index.html`, `WLab-robustness-report.html`, and the CIE data on the workbooks' Tables, Weights and Matrices sheets), are
 therefore licensed under CC BY-SA 4.0. The CIE datasets, as the CIE asks them to be cited:
 
 - CIE 2019, Colour-matching functions of CIE 1931 standard colorimetric observer, CIE, Vienna, AT, DOI [10.25039/CIE.DS.xvudnb9b](https://doi.org/10.25039/CIE.DS.xvudnb9b)

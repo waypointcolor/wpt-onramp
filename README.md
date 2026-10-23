@@ -11,6 +11,8 @@ samples, are in the guide's **Technical annex**; its section A.8 maps each equat
 that implements it here.
 
 - **The guide:** [WLab-Color-Without-the-Fine-Print.pdf](WLab-Color-Without-the-Fine-Print.pdf), with the Technical annex at the end (also readable here as [Markdown](WLab-Color-Without-the-Fine-Print.md))
+- **The web page:** [index.html](index.html), the short version and two interactive demos (download it and open it, or host the repository with GitHub Pages)
+- **The robustness report in a browser:** [WLab-robustness-report.html](WLab-robustness-report.html) (download it and open it; nothing to install)
 
 ## What is here
 
@@ -44,6 +46,12 @@ under the first (normally the viewing booth). Your own lights go on the Custom l
 measured spectrum, 380-780 nm at 5 nm); the workbook builds their Wpt normalization in-sheet and adds
 them to the list. No macros.
 
+`WLab-robustness-report.html` is the same report as a single web page: open it in any browser (a
+double-click is enough), paste the spectra (any range and interval inside 380-780 nm, as 0-1 or
+percent), choose the lights and observers, add your own measured lights, and download the table as
+CSV. Nothing is installed and nothing is sent anywhere. "Load the guide's example" reproduces the
+table in the guide. It is built on `wlab`, an implementation of Wpt, WLab and MATs in TypeScript.
+
 `excel/Wpt-normalization.xlsx` is for technical users: pick or paste an observer and a light for a
 source and a destination, and see each Wpt normalization in its four steps (Technical annex A.3),
 the MAT between them, an XYZ converter and the source observer's functions converted by the MAT.
@@ -64,6 +72,8 @@ any range and interval inside 380-780 nm works. No tolerances are built in: Delt
 designed to be similar in size to familiar DeltaE values, and experience with your own products should set the limits.
 `python/make_buyer_example.py` makes the guide's example (a brand red and two submissions that both
 match it exactly in a D50 booth) from the included Munsell set; its output is in `results/`.
+`python/make_pmcc_twin.py` makes the landing page's pairs, two measured PMCC patches (Smurf and Unitary Blue), each
+with a twin that matches it under D65, from a PMCC measurement file; its output is in `results/` too.
 
 ## Gamut mapping: judging hue lines by eye
 

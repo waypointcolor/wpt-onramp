@@ -199,7 +199,7 @@ WLab reverses plain CIELAB's verdict: the real patch with its smooth spectrum mo
 
 The last row shows that the familiar fix agrees. Adding a proper chromatic adaptation step to CIELAB (CAT02, described under "CATs and MATs") gives the same verdict for this single observer. What WLab adds is one common representation in which the same comparison also works across observers and cameras, and an adjustment built on materials rather than on how colors look. What a material moves beyond typical materials is its color inconstancy.
 
-**One caution.** ΔE<sub>WLab</sub> does not predict what a particular person will see in a particular room. That is the job of a color appearance model. WLab tells you how far apart materials are, in units that behave like familiar ΔE units.
+**One caution.** ΔE<sub>WLab</sub> is not a prediction of what someone sees in the room where they stand. It predicts the color difference the reference observer (CIE 1931, under illuminant C) would see between the two materials, whatever light and observer they were measured under, in units that behave like familiar ΔE units. How colors look to a viewer adapted to a particular scene is the job of a color appearance model.
 
 **Where it all fits.** Each column pairs a simple, curve-free space with its more uniform partner, the way XYZ pairs with CIELAB.
 
@@ -223,7 +223,7 @@ Think back to the torn sheet of paper. A CAT asks which patch under incandescent
 - converting a camera's, or a particular person's, responses to standard colorimetry, and back;
 - comparing data gathered for different observers.
 
-In each case there is no single adapted viewer to model, only a material and the numbers it would give. Because a MAT works through materials, it handles a change of observer as easily as a change of light. A CAT is not designed to bridge two different observers. It describes how one viewer adapts to a new light, and says nothing about how two viewers' responses relate. Even so, CATs often get used for these jobs, simply because they are the familiar tool.
+In each case there is no single adapted viewer to model, only a material and the numbers it would give. Because a MAT works through materials, it handles a change of observer as easily as a change of light. A CAT is not designed to bridge two different observers. It is built from experiments in which viewers match how colors look under two lights, and no experiment can compare how a color looks in two different people's minds. What two observers do share is the materials in front of them, and that is what a MAT works from. Even so, CATs often get used for these jobs, simply because they are the familiar tool.
 
 **Two lights with the same white.** Two lights can have exactly the same white (the same X, Y and Z for a white surface) and still have very different spectra: daylight and a white LED made of three narrow colored bands, for example. A CAT sees only the white, so it treats the two lights as the same and predicts no change. The colors of materials do change, because each material reflects the two spectra differently. Wpt normalization is built from how real materials respond under each light, so it tells the two lights apart, and a MAT predicts much of the change. In one test (1,600 Munsell colors, CIE 1931 observer, D65 against such an LED), the colors moved by ΔE<sub>00</sub> 2.6 on average and up to 9; the CAT predicted no change, and the MAT's predictions were off by 1.1 on average.
 
@@ -287,11 +287,11 @@ One caution for the observer and light rows: each Wpt normalization absorbs the 
 
 **Another option to try: gamut mapping.** Every printer and display can reproduce only part of the full range of colors, its *gamut*. Gamut mapping moves colors that fall outside it to ones that fit, usually toward gray while trying to keep their hue. WLab can serve as the space for that mapping. Its distances work like familiar ΔE values, and its hue lines run straight out from white on the familiar horseshoe-shaped chromaticity diagram. In the author's experience, gamut mapping in Wpt gives reasonable results, but how well it works depends on the printer, the display and the images: it is an option to try and judge on your own work.
 
-**Try it yourself.** Figure 5 is a small experiment you can run by eye, for three hues: a red, a green and a blue. Each row is one lightness, running from gray to the most vivid color that fits on screen, and each chip is split in two. The upper-left half holds WLab hue constant. The lower-right half has the same lightness and chroma but holds CIELAB hue constant, at the hue of the ringed chip. Where the halves differ, a gamut mapping that keeps CIELAB hue would shift the hue that WLab keeps. Look across the rows, especially toward the lighter and grayer chips, and judge for yourself which half stays closer to the hue of the ringed chip. The two part clearly in the red and the blue, where the CIELAB halves drift toward orange and violet; in the green they are only slightly shifted to yellow. This uneven sensitivity to hue is the same thing ΔE<sub>00</sub>'s hue corrections for blue deal with. The companion package draws the same picture for any hue.
-
 ![Constant WLab hue against constant CIELAB hue](figures/fig5_hue_planes.png)
 
 *Figure 5. Constant WLab hue against constant CIELAB hue for a red, a green and a blue. Each row is one lightness, from gray (left) to the most vivid color that fits on screen. Each chip is split: upper left, constant WLab hue; lower right, the same L\* and C\*<sub>ab</sub> at the CIELAB hue of the ringed chip, the darkest of the most vivid. CIE 1931 observer, D50 (the ICC profile connection space), shown through a Bradford adaptation to sRGB; a dot marks a CIELAB half outside sRGB. Screen and print colors are approximate.*
+
+**Try it yourself.** Figure 5 is a small experiment you can run by eye, for three hues: a red, a green and a blue. Each row is one lightness, running from gray to the most vivid color that fits on screen, and each chip is split in two. The upper-left half holds WLab hue constant. The lower-right half has the same lightness and chroma but holds CIELAB hue constant, at the hue of the ringed chip. Where the halves differ, a gamut mapping that keeps CIELAB hue would shift the hue that WLab keeps. Look across the rows, especially toward the lighter and grayer chips, and judge for yourself which half stays closer to the hue of the ringed chip. The two part clearly in the red and the blue, where the CIELAB halves drift toward orange and violet; in the green they are only slightly shifted to yellow. This uneven sensitivity to hue is the same thing ΔE<sub>00</sub>'s hue corrections for blue deal with. The companion package draws the same picture for any hue.
 
 ## When to reach for Wpt and WLab
 
@@ -338,7 +338,7 @@ All values are ΔE<sub>WLab</sub> against the standard, CIE 1931 observer, excep
 
 Sample wording for a request: *"With each submission, supply the spectral reflectance of the submission and the standard (380–730 nm at 10 nm), and a WLab robustness report against the standard under D50, illuminant A and our store lighting, CIE 1931 observer."*
 
-If the spectra come to you, you can make the report yourself: the companion package includes a robustness workbook. Paste the spectra of the standard and up to ten samples, pick the lights from a list, and the table above appears. Your own store or home lights can be added by pasting their measured spectra. It needs no programming.
+If the spectra come to you, you can make the report yourself: the companion package includes a robustness workbook, and the same report as a web page that opens in any browser. Paste the spectra of the standard and the samples, pick the lights from a list, and the table above appears. Your own store or home lights can be added by pasting their measured spectra. Neither needs any programming.
 
 **How to read the report**
 
@@ -367,6 +367,8 @@ If you can compute CIELAB from a spectrum, you can compute WLab: it is one extra
 
 **With colorimetry only.** If you have XYZ for one known condition but no spectra, a MAT estimates the XYZ for another: apply the source condition's normalization, then the destination's run backwards. The companion package lists ready-made normalizations for the CIE 2° and 10° observers under C, D50, D65, A, E (equal energy), F2 and F11 (two CIE fluorescent lamps). The Wpt paper's published matrices use a slightly different reference; the Technical annex explains how they relate.
 
+**From display colors.** Values in sRGB, Display P3 or Adobe RGB stand for XYZ values for the CIE 1931 observer under D65 (each color space defines the conversion), so they can go through the D65 Wpt normalization into WLab. A display color is not a material: in WLab it stands for the material that would give those numbers under D65, so it says nothing about how a real material would change under other lights. The `wlab` package does this for sRGB, Display P3, Adobe RGB and Rec. 2020 (`rgbToWlab` and `wlabToRgb`).
+
 **Sanity checks**
 
 - A spectrally flat 50% gray gives WLab (76.1, 0, 0) under every light, the same as its L\*.
@@ -376,6 +378,7 @@ If you can compute CIELAB from a spectrum, you can compute WLab: it is one extra
 **Tools**
 
 - **Companion package.** Every example in this guide comes with code you can run and change (the Purplish Blue example needs ColorChecker spectra you supply): GNU Octave (or MATLAB) scripts, the same examples in Python, and an Excel calculator for XYZ to Wpt, WLab and CIELAB, the three color differences, and MATs. All three give the same numbers, and each example is a starting point for your own. It also includes a robustness workbook, with no programming needed, that turns measured spectra into a table like the one in "For buyers and managers", and a Wpt normalization workbook that shows how the normalization is built for any observer and light (Technical annex A.3) and builds MATs for any observer and light.
+- **Robustness report in a browser.** `WLab-robustness-report.html`, in the companion package, makes the table in "For buyers and managers" from pasted spectra, with your own lights if you like. It is a single page that opens with a double-click, needs nothing installed and sends nothing anywhere. It is built on `wlab`, an implementation of Wpt, WLab and MATs in TypeScript for developers who want them in their own web tools.
 - **iccMAX.** The open-source [iccDEV](https://github.com/InternationalColorConsortium/iccDEV) tools build and apply profiles that carry a Wpt MAT for custom observers.
 
 The companion package will be published as a public Git repository.
@@ -664,14 +667,14 @@ $$
 
 ### A.8 Where each equation is implemented
 
-| Equations | Octave (toolbox/) | Python (wptonramp.py) | Spreadsheet |
-| --- | --- | --- | --- |
-| A.1 Sensor responses | `ref2XYZ.m` | ref2xyz | inputs are XYZ |
-| A.2 CIELAB, ΔE<sub>00</sub> | `XYZ2Lab.m`, `deltaE00.m` | `xyz_to_lab`, `delta_e00` | Calculator: L\*, a\*, b\*, ΔE\*<sub>ab</sub>, ΔE<sub>00</sub> |
-| A.3 Wpt normalization | `getWptStruct.m` | `wpt_normalization` | Matrices sheet (14 conditions) |
-| A.4 Reference p, t | `wpt_reference_pt.csv` | `load_base` | — |
-| A.5 WLab | `Wpt2WLab.m`, `WLab2Wpt.m` | `wpt_to_wlab`, `wlab_to_wpt` | Calculator (forward) |
-| A.6 ΔE<sub>WLab</sub> | `ex02`, `ex06` | `delta_e_wlab` | Calculator: ΔE<sub>WLab</sub> |
-| A.7 MAT, CAT | `ex05_mats.m` | mat | MAT sheet |
+| Equations | Octave (toolbox/) | Python (wptonramp.py) | TypeScript (wlab) | Spreadsheet |
+| --- | --- | --- | --- | --- |
+| A.1 Sensor responses | `ref2XYZ.m` | `ref2xyz` | `responses` | inputs are XYZ |
+| A.2 CIELAB, ΔE<sub>00</sub> | `XYZ2Lab.m`, `deltaE00.m` | `xyz_to_lab`, `delta_e00` | `xyzToLab`, `deltaE00` | Calculator: L\*, a\*, b\*, ΔE\*<sub>ab</sub>, ΔE<sub>00</sub> |
+| A.3 Wpt normalization | `getWptStruct.m` | `wpt_normalization` | `wptNormalization` | Matrices sheet (14 conditions) |
+| A.4 Reference p, t | `wpt_reference_pt.csv` | `load_base` | `munsellBase` | — |
+| A.5 WLab | `Wpt2WLab.m`, `WLab2Wpt.m` | `wpt_to_wlab`, `wlab_to_wpt` | `wptToWlab`, `wlabToWpt` | Calculator (forward) |
+| A.6 ΔE<sub>WLab</sub> | `ex02`, `ex06` | `delta_e_wlab` | `deltaEWlab` | Calculator: ΔE<sub>WLab</sub> |
+| A.7 MAT, CAT | `ex05_mats.m` | `mat` | `mat`, `cat` | MAT sheet |
 
-The three implementations agree to within 10⁻⁹ on the Wpt matrices and the spreadsheets, and to within 10⁻⁷ on WLab for 1,600 Munsell samples (the logs are in the package's results folder). Numbers in this annex that no example prints come from `python/annex_checks.py.`
+The Octave, Python and spreadsheet implementations agree to within 10⁻⁹ on the Wpt matrices and the spreadsheets, and to within 10⁻⁷ on WLab for 1,600 Munsell samples (the logs are in the package's results folder). The TypeScript package, `wlab`, reproduces the Python results to within 10⁻⁹ in its own tests. Numbers in this annex that no example prints come from `python/annex_checks.py.`

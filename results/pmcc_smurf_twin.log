@@ -1,0 +1,7 @@
+PMCC Smurf and its twin; twin reflectance 0.000 to 0.912
+Change from CIE 1931, D65 (DeltaE00 / DeltaE WLab), and between the two (DeltaE WLab)
+   CIE 1931, D65   Smurf  0.00 /  0.00   twin  0.00 /  0.00   between  0.00
+   CIE 1931, D50   Smurf  3.37 /  0.08   twin  3.23 /  0.48   between  0.40
+   CIE 1931, A     Smurf  7.78 /  0.15   twin  8.12 /  0.77   between  0.68
+   CIE 1931, F11   Smurf  2.99 /  1.24   twin 10.85 / 11.56   between 10.73
+   CIE 1964, D65   Smurf  3.66 /  0.22   twin  5.49 /  2.71   between  2.51
