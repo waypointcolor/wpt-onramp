@@ -8,6 +8,7 @@ All spectral data run from 380 to 780 nm in 5 nm steps unless noted.
 | `toolbox/CIE_2Deg-2015_380-830-1nm.txt`, `toolbox/CIE_10Deg-2015_380-830-1nm.txt` | CIE 2015 2° and 10° cone-fundamental-based color-matching functions, 1 nm | CIE 170-2:2015 |
 | `toolbox/CIE_IllA_300-830-5nm.txt`, `toolbox/CIE_IllC_300-830-5nm.txt`, `toolbox/CIE_IllD65_300-830-5nm.txt`, `toolbox/CIE_IllF_1-12_380-780-5nm.txt` | Illuminants A, C, D65 and F1 to F12 | CIE tables (CIE 15) |
 | `toolbox/CIE_lms_cf_2deg.csv`, `toolbox/CIE_lms_cf_10deg.csv` | CIE 2006 LMS cone fundamentals for 2° and 10° field size, in terms of energy, 390 to 830 nm at 5 nm (S to 615 nm) | The CIE's open datasets, unchanged copies (MD5 dba2e9d1f5e6667575aa069832159510 and c2e606fddac441d032c389317e6de80b); used by the `wlab` package and the labs |
+| `toolbox/CIE_sle_scotopic.csv` | CIE scotopic luminous efficiency function V′(λ), the rods' sensitivity, 380 to 780 nm at 1 nm | The CIE's open dataset (CIE 018:2019), an unchanged copy (MD5 3e45714a429d02e5d1f2a752226d7698); used by the `wlab` package and the labs for an observer of cones plus rods |
 | `toolbox/CIE_illum_LEDs.csv` | The CIE illuminants representing typical LED lamps: LED-B1 to LED-B5 (blue-pumped phosphor white, about 2700 to 6600 K), LED-BH1 (phosphor white with red), LED-RGB1 (red, green and blue chips) and LED-V1, LED-V2 (violet-pumped phosphor white); wavelength then one column each, no header | CIE 015:2018, Tables 12.1 and 12.2; an unchanged copy of the CIE's file (MD5 91a73557fe319a085dd598ce96fa8ace), as in the wpt-wlab-guide |
 | `toolbox/CIE_eigD_380-780-5nm.txt` | Components of the CIE daylight illuminants; D50 is computed from them at 5000 K (`cieIllD.m`), as in the original Wpt code | CIE tables (CIE 15) |
 | `toolbox/spectral_tables_380_780_5.csv` | The observers and illuminants above on one 5 nm grid, for Python and the workbooks | Written from the files above by `octave/exportTables.m` |
@@ -26,7 +27,7 @@ All spectral data run from 380 to 780 nm in 5 nm steps unless noted.
 The CIE publishes its colorimetric data tables as open datasets under the [Creative Commons
 Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0)](https://creativecommons.org/licenses/by-sa/4.0/).
 The files above that hold CIE data, or are calculated from it (`spectral_tables_380_780_5.csv`,
-`CIE_illum_LEDs.csv`, `CIE_lms_cf_2deg.csv`, `CIE_lms_cf_10deg.csv`, `wpt_matrices.csv`, `index.html`, `WLab-robustness-report.html`, and the CIE data on the workbooks' Tables, Weights and Matrices sheets), are
+`CIE_illum_LEDs.csv`, `CIE_lms_cf_2deg.csv`, `CIE_lms_cf_10deg.csv`, `CIE_sle_scotopic.csv`, `wpt_matrices.csv`, `index.html`, `WLab-robustness-report.html`, and the CIE data on the workbooks' Tables, Weights and Matrices sheets), are
 therefore licensed under CC BY-SA 4.0. The CIE datasets, as the CIE asks them to be cited:
 
 - CIE 2019, Colour-matching functions of CIE 1931 standard colorimetric observer, CIE, Vienna, AT, DOI [10.25039/CIE.DS.xvudnb9b](https://doi.org/10.25039/CIE.DS.xvudnb9b)
@@ -39,6 +40,7 @@ therefore licensed under CC BY-SA 4.0. The CIE datasets, as the CIE asks them to
 - CIE 2018, Components of the relative spectral distribution of daylight used in the calculation of relative spectral power distributions of CIE daylight illuminants of different correlated colour temperatures, CIE, Vienna, AT, DOI [10.25039/CIE.DS.w7zunnny](https://doi.org/10.25039/CIE.DS.w7zunnny)
 - CIE 2018, Relative spectral power distributions of illuminants representing typical fluorescent lamps, CIE, Vienna, AT, DOI [10.25039/CIE.DS.ukaymjdn](https://doi.org/10.25039/CIE.DS.ukaymjdn)
 - CIE 2018, Relative spectral power distributions of illuminants representing typical LED lamps, CIE, Vienna, AT, DOI [10.25039/CIE.DS.vgssnyfg](https://doi.org/10.25039/CIE.DS.vgssnyfg)
+- CIE 2019, CIE spectral luminous efficiency for scotopic vision, CIE, Vienna, AT, DOI [10.25039/CIE.DS.gr6w4b5g](https://doi.org/10.25039/CIE.DS.gr6w4b5g)
 - CIE 2006, CIE 2006 LMS cone fundamentals for 2° field size in terms of energy, CIE, Vienna, AT, DOI [10.25039/CIE.DS.tijidesg](https://doi.org/10.25039/CIE.DS.tijidesg)
 - CIE 2006, CIE 2006 LMS cone fundamentals for 10° field size in terms of energy, CIE, Vienna, AT, DOI [10.25039/CIE.DS.nxsqeri8](https://doi.org/10.25039/CIE.DS.nxsqeri8)
 
