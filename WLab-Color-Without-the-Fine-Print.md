@@ -428,6 +428,8 @@ Read in this order: each one assumes the one before it.
 
 Code and spreadsheets: the companion package described under "Getting started", [github.com/waypointcolor/wpt-onramp](https://github.com/waypointcolor/wpt-onramp).
 
+**Where to go next.** The Waypoint Labs try these ideas on your own data, in a browser and sending nothing anywhere: your own lights, observers and cameras, libraries of materials, and the measures this guide has introduced. Start with *From the onramp to using material color in practice*, at [waypointcolor.github.io/wpt-onramp/labs/start.html](https://waypointcolor.github.io/wpt-onramp/labs/start.html), which picks up where this guide ends: the question each lab takes up, the ideas they share, and familiar terms set beside their material color counterparts.
+
 ## Technical annex: the equations behind Wpt and WLab
 
 This annex states every equation the guide describes in words, with every constant, so the method can be reproduced without the code. It follows the 2015 Wpt and WLab papers (Derhak and Berns), and the companion package implements each equation in Octave, Python and a spreadsheet; section A.8 says where.
