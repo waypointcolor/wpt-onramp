@@ -71,3 +71,7 @@ The guide's worked example (`octave/ex02_purplish_blue.m` and `python/examples.p
 spectra of the X-Rite ColorChecker and of the MetaChecker, a set of computed metamers of its patches.
 They are not distributed here. To run `ex02`, place them in `data/` as described in `data/README.md`.
 `ex06` shows the same effect with a metameric twin built from the included Munsell data.
+
+The Waypoint Labs pages (`labs/`) carry a different chart: a ColorChecker Digital SG (140 patches), measured by
+Roy S. Berns and used with his permission (`labs/data/objects/colorchecker-sg.json`; see the `wlab` package's
+DATA.md). Those measurements are not the ColorChecker spectra above, and they are not used by the guide's examples.
