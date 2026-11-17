@@ -381,7 +381,7 @@ If you can compute CIELAB from a spectrum, you can compute WLab: it is one extra
 - **Robustness report in a browser.** `WLab-robustness-report.html`, in the companion package, makes the table in "For buyers and managers" from pasted spectra, with your own lights if you like. It is a single page that opens with a double-click, needs nothing installed and sends nothing anywhere. It is built on `wlab`, an implementation of Wpt, WLab and MATs in TypeScript for developers who want them in their own web tools.
 - **iccMAX.** The open-source [iccDEV](https://github.com/InternationalColorConsortium/iccDEV) tools build and apply profiles that carry a Wpt MAT for custom observers.
 
-The companion package is at [github.com/waypointcolor/wpt-onramp](https://github.com/waypointcolor/wpt-onramp). Its web page, with the short version of this guide, the metamerism demo and the hue experiment, is at [waypointcolor.github.io/wpt-onramp](https://waypointcolor.github.io/wpt-onramp/), and `wlab` is at [github.com/waypointcolor/wlab](https://github.com/waypointcolor/wlab).
+The companion package is at [github.com/waypointcolor/wpt-onramp](https://github.com/waypointcolor/wpt-onramp). Its web page, with the short version of this guide and an animation of CIELAB and WLab across viewers and lights, is at [waypointcolor.github.io/wpt-onramp](https://waypointcolor.github.io/wpt-onramp/), and `wlab` is at [github.com/waypointcolor/wlab](https://github.com/waypointcolor/wlab).
 
 ## Glossary
 
