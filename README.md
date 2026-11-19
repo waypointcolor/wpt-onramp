@@ -1,6 +1,6 @@
 # wpt-onramp
 
-Code and spreadsheets that go with the guide **WLab and Wpt: Color Without the Fine Print. An Onramp
+Code and spreadsheets that go with the guide **Wpt and WLab: Color Without the Fine Print. An Onramp
 to Material Color Equivalency**. Every number the guide computes can be reproduced here, in
 GNU Octave (or MATLAB), in Python, or in a spreadsheet, and each example is a starting point for
 your own experiments. (Results the guide quotes from the published papers, such as the

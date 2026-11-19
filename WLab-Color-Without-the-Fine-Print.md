@@ -1,4 +1,4 @@
-# WLab and Wpt: Color Without the Fine Print
+# Wpt and WLab: Color Without the Fine Print
 
 ### An Onramp to Material Color Equivalency
 
