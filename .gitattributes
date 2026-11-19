@@ -4,5 +4,6 @@
 *.png binary
 *.xlsx binary
 *.ods binary
+*.wasm binary
 # The CIE LED table is kept byte for byte as the CIE published it (CRLF line endings).
 CIE_illum_LEDs.csv -text
