@@ -6,7 +6,7 @@ Maxim W. Derhak (PhD) — October 22, 2026; revised November 23, 2026
 
 ## Why this guide exists
 
-This guide is an onramp to a different way of describing color: by the *material* (a paint, an ink, a fabric, a plastic) rather than by how it measures under one light for one viewer. It ends at two coordinate systems: Wpt (pronounced "Waypoint"), which describes the material, and WLab (Waypoint Lab), which reshapes Wpt so that distances read like familiar ΔE color differences. Both are introduced properly once the groundwork is in place.
+This guide is an onramp to a different way of describing color: by the *material* (a paint, an ink, a fabric, a plastic) rather than by how it measures under one light for one viewer. It leads to Wpt (pronounced "Waypoint"), which describes the material, and WLab (Waypoint Lab), which reshapes Wpt so that distances read like familiar ΔE color differences, and then to what they make possible: carrying measurements between lights and viewers, and judging whether a match will hold. Both are introduced properly once the groundwork is in place.
 
 Most people who work with color are at least familiar with the CIELAB color coordinate system and the ΔE color difference score. Both are good tools, but every CIELAB value comes with fine print: it holds for one light and one standard viewer, and that is easy to forget. This guide shows why that matters and what Wpt and WLab add.
 
@@ -356,7 +356,7 @@ All values are ΔE<sub>WLab</sub> against the standard, CIE 1931 observer, excep
 
 Sample wording for a request: *"With each submission, supply the spectral reflectance of the submission and the standard (380–730 nm at 10 nm), and a WLab robustness report against the standard under D50, illuminant A and our store lighting, CIE 1931 observer."*
 
-If the spectra come to you, you can make the report yourself: the companion package includes a robustness workbook, and the same report as a web page that opens in any browser. Paste the spectra of the standard and the samples, pick the lights from a list, and the table above appears. Your own store or home lights can be added by pasting their measured spectra. Neither needs any programming.
+If the spectra come to you, you can make the report yourself: the companion package includes a robustness workbook, and the same report as a web page that opens in any browser. Paste the spectra of the standard and the samples, pick the lights from a list, and the table above appears. Your own store or home lights can be added by pasting their measured spectra. Neither needs any programming. The web page also sums up each sample's numbers in words, explains how to read the table, and prints all of it as a report to hand to a supplier or a brand owner; its "Load the guide's example" makes the table above, ready to print as an example report.
 
 **How to read the report**
 
