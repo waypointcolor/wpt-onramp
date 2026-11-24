@@ -2,7 +2,7 @@
 
 ### An Onramp to Material Color Equivalency
 
-Maxim W. Derhak (PhD) — October 22, 2026
+Maxim W. Derhak (PhD) — October 22, 2026; revised November 23, 2026
 
 ## Why this guide exists
 
@@ -167,6 +167,14 @@ Practical Wpt keeps that reference and lets you choose which materials carry it 
 - **Mixing a material with gray keeps one hue.** Mix a material's reflectance with a spectrally flat gray in any proportion (as halftones and other area mixtures do; pigment tints only approximate this), and every result has exactly the same Wpt hue, under any light and for any observer. That hue can move a little from one condition to another, but within each condition the whole family shares it. CIELAB hue does not stay put in this way: for one blue family it spread by about 12.5° under incandescent light.
 - **It is not perceptually uniform.** Equal steps in Wpt are not equal visual steps. That is WLab's job.
 
+**The observer's curves in Wpt (optional reading).** Each of W, p and t is a weighted mix of the observer's three responses, so the same mix can be applied to the observer's sensitivity curves themselves, wavelength by wavelength. That gives three curves: how much light of each wavelength adds to W, to p and to t. Figure 3 shows them for the CIE 1931 observer under D65.
+
+![The CIE 1931 observer's curves in Wpt](figures/fig3_wpt_curves.png)
+
+*Figure 3. The CIE 1931 observer's color-matching functions mixed as its Wpt normalization under D65 mixes the responses, scaled together so that W's highest value is 1. The dashed lines mark where p and t cross 0. Shown 380–730 nm.*
+
+W is a single hump, like the eye's sensitivity to brightness. p and t go both ways, as the opponent signals of vision do (the red–green and yellow–blue signals the eye forms from its three cone types). Light below about 479 nm or above about 577 nm adds to reddish, and light in between to greenish; light below about 501 nm adds to bluish, and above it to yellowish. Those three wavelengths sit near where people usually report the *unique hues*: a light of about 470 to 480 nm for unique blue and 575 to 580 nm for unique yellow (both neither reddish nor greenish), and about 490 to 560 nm, a wider range, for unique green (neither yellowish nor bluish). The normalization does not use these wavelengths: it only places the 40 Munsell colors. The curves move a little with the light (under illuminant A the three crossings move 6 to 8 nm toward the red), and any re-mix of one observer's curves, such as the CIE 2006 cone fundamentals and the CIE 2015 color-matching functions made from them, gives the same three curves. The Waypoint Labs, web pages described under "Getting started", draw them for any observer and light (the *Wpt normalization and MATs* lab).
+
 ## WLab: measuring difference between materials
 
 WLab (Waypoint Lab) reshapes Wpt so that a plain straight-line distance works as a color difference, comparable to the leading ΔE formulas. Another way to see it: every Wpt normalization predicts what the reference observer (CIE 1931, under illuminant C) would see for the same material. So a ΔE<sub>WLab</sub> is, in effect, the color difference that observer would judge between the two materials under illuminant C, wherever they were measured. The prediction is close, not exact: the reference observer may see a material slightly differently under illuminant C, and that difference is metamerism between the two observing conditions (observer and light). WLab has fine print too: a reference observer under illuminant C, and a prediction that is close but not exact. But it is the same fine print for every light and every viewer. WLab is not a color appearance space. It is to Wpt what CIELAB is to XYZ.
@@ -181,7 +189,15 @@ WLab has three coordinates, L<sub>w</sub>, a<sub>w</sub> and b<sub>w</sub> (the 
 
 Each step can be undone, so WLab converts back to Wpt exactly. The equations take a few more lines than CIELAB's and are about as involved as CIEDE2000's. The difference is where the work happens: CIEDE2000 adds weights every time two colors are compared, while WLab puts the work into the coordinates once, so every comparison afterwards is a straight line.
 
-**How good is it?** Tested against two datasets from color-difference assessment experiments, ΔE<sub>WLab</sub> performed about as well as ΔE<sub>94</sub>, ΔE<sub>00</sub> and other leading formulas (the differences were not statistically significant). Against the Munsell system, its large-scale spacing is about as even as that of CIELAB and of CAM02-UCS (a uniform space built on CIECAM02). The details are in the Technical annex (A.6).
+**How good is it?** Tested against two datasets from color-difference assessment experiments, ΔE<sub>WLab</sub> performed about as well as ΔE<sub>94</sub>, ΔE<sub>00</sub> and other leading formulas (the differences were not statistically significant). Against the large, equal visual steps of the Munsell system, it depends on what is measured. Over the Munsell colors of Value 5 (CIE 1931 observer, illuminant C), set beside CIELAB and CAM16-UCS (a uniform space built on the CAM16 appearance model):
+
+- **Hue.** The colors of one Munsell Hue spread in hue angle by 1.7° in WLab (root mean square), 1.3° in CIELAB and 1.0° in CAM16-UCS.
+- **Rings of equal Chroma.** Their chroma varies around the ring by 5% in WLab, 18% in CIELAB and 8% in CAM16-UCS.
+- **Steps of Chroma.** Equal steps of Munsell Chroma along one Hue vary in size by 30% in WLab, 4% in CIELAB and 22% in CAM16-UCS.
+
+The last comes from the logarithmic compression of chroma (step 3 above): it makes small differences between vivid colors read like ΔE<sub>00</sub>'s, and it narrows Munsell's large steps of Chroma as the colors get more vivid. The *Uniformity and hue* lab of the Waypoint Labs (see "Getting started") measures all three for any observer and light. The details are in the Technical annex (A.6).
+
+**For large steps: LSWLab.** WLab has a companion for large steps, LSWLab (Large-Scale Waypoint Lab), also built on Wpt. It keeps WLab's lightness and hue, and undoes the average part of the chroma compression, so that chroma is counted as ΔE\*<sub>ab</sub> counts it, without the extra allowance for vivid colors. Its steps of Munsell Chroma vary in size by 10% and its rings of equal Chroma by 8%, and its distances come out about the size of ΔE\*<sub>ab</sub>'s. Because it is built on Wpt, it stays as steady as WLab across lights and observers. WLab is the one for near matches and tolerances, as ΔE<sub>00</sub> is; LSWLab is the one for spacing colors in even steps and comparing large differences, each for what it was fitted to. The *Large and small color differences* lab compares the two, and `wlab` computes LSWLab (Technical annex A.5).
 
 **What a WLab difference means.** Because every WLab value goes through Wpt, a ΔE<sub>WLab</sub> is a difference between *materials*, not between two appearances. Values from different lights and observers share one common representation, so you can compare materials as each condition records them, the way prices compare once they're all in the same currency. That includes custom observers, not only the CIE standard ones: the CIE 2006 observers for a given age and field size, the CIE 2015 observers, or a camera's sensor curves. Build the Wpt normalization for that observer and light, and its WLab values join the same representation. That lets us finish the Purplish Blue example.
 
@@ -195,7 +211,7 @@ Each step can be undone, so WLab converts back to Wpt exactly. The equations tak
 | CIELAB change, for comparison, ΔE<sub>00</sub> | 12.7 | 5.4 |
 | CIELAB with a CAT (CAT02), change, ΔE<sub>00</sub> | 0.9 | 14.1 |
 
-WLab reverses plain CIELAB's verdict: the real patch with its smooth spectrum moves little (2.3), and the jagged twin moves a lot. Across the 18 chromatic ColorChecker patches, plain CIELAB says the real patch moved more than its twin in 5 cases; WLab, and CIELAB with a CAT, say so in none.
+WLab reverses plain CIELAB's verdict: the real patch with its smooth spectrum moves little (2.3), and the jagged twin moves a lot. Across the 18 chromatic ColorChecker patches, plain CIELAB says the real patch moved more than its twin in 5 cases; WLab, and CIELAB with a CAT, say so in none. The *Materials across lights and observers* lab of the Waypoint Labs makes this comparison for your own spectra, under many lights and observers at once.
 
 The last row shows that the familiar fix agrees. Adding a proper chromatic adaptation step to CIELAB (CAT02, described under "CATs and MATs") gives the same verdict for this single observer. What WLab adds is one common representation in which the same comparison also works across observers and cameras, and an adjustment built on materials rather than on how colors look. What a material moves beyond typical materials is its color inconstancy.
 
@@ -203,9 +219,9 @@ The last row shows that the familiar fix agrees. Adding a proper chromatic adapt
 
 **Where it all fits.** Each column pairs a simple, curve-free space with its more uniform partner, the way XYZ pairs with CIELAB.
 
-![Where Wpt and WLab sit among familiar color spaces](figures/fig3_where_it_fits.png)
+![Where Wpt and WLab sit among familiar color spaces](figures/fig4_where_it_fits.png)
 
-*Figure 3. Wpt and WLab fill the material column of a familiar grid.*
+*Figure 4. Wpt and WLab fill the material column of a familiar grid.*
 
 Read across a row to compare the kinds of question each space answers; read down a column to see the uniform space built on its curve-free base.
 
@@ -225,7 +241,7 @@ Think back to the torn sheet of paper. A CAT asks which patch under incandescent
 
 In each case there is no single adapted viewer to model, only a material and the numbers it would give. Because a MAT works through materials, it handles a change of observer as easily as a change of light. A CAT is not designed to bridge two different observers. It is built from experiments in which viewers match how colors look under two lights, and no experiment can compare how a color looks in two different people's minds. What two observers do share is the materials in front of them, and that is what a MAT works from. Even so, CATs often get used for these jobs, simply because they are the familiar tool.
 
-**Two lights with the same white.** Two lights can have exactly the same white (the same X, Y and Z for a white surface) and still have very different spectra: daylight and a white LED made of three narrow colored bands, for example. A CAT sees only the white, so it treats the two lights as the same and predicts no change. The colors of materials do change, because each material reflects the two spectra differently. Wpt normalization is built from how real materials respond under each light, so it tells the two lights apart, and a MAT predicts much of the change. In one test (1,600 Munsell colors, CIE 1931 observer, D65 against such an LED), the colors moved by ΔE<sub>00</sub> 2.6 on average and up to 9; the CAT predicted no change, and the MAT's predictions were off by 1.1 on average.
+**Two lights with the same white.** Two lights can have exactly the same white (the same X, Y and Z for a white surface) and still have very different spectra: daylight and a white LED made of three narrow colored bands, for example. A CAT sees only the white, so it treats the two lights as the same and predicts no change. The colors of materials do change, because each material reflects the two spectra differently. Wpt normalization is built from how real materials respond under each light, so it tells the two lights apart, and a MAT predicts much of the change. In one test (1,600 Munsell colors, CIE 1931 observer), D65 was set against RGB-D65, an LED of red, green and blue peaks mixed to give exactly D65's white. The colors moved by ΔE<sub>00</sub> 4.1 on average and up to 13; the CAT predicted no change, and the MAT's predictions were off by 1.2 on average. The *Comparing MATs and CATs* lab of the Waypoint Labs runs this test, and lets you look for other pairs of lights with nearly the same white.
 
 **No MAT is exact.** A material's numbers in a new condition depend on its full spectrum, and three numbers do not record a spectrum. The Purplish Blue twins prove it: identical numbers under D65, different numbers under A. A MAT makes a close prediction for typical materials. What is left over is the color inconstancy that WLab measures.
 
@@ -244,9 +260,9 @@ A CAT and a MAT both work the same way: go into an intermediate space, then come
 
 First, the source condition's Wpt normalization takes you into Wpt. Then the destination's normalization, run backwards, takes you out.
 
-![A CAT and a MAT take the same route through different waypoints](figures/fig4_cat_and_mat_routes.png)
+![A CAT and a MAT take the same route through different waypoints](figures/fig5_cat_and_mat_routes.png)
 
-*Figure 4. A CAT and a MAT take the same route through different waypoints. Both map white exactly (the CAT with full adaptation); only the MAT also handles a change of observer.*
+*Figure 5. A CAT and a MAT take the same route through different waypoints. Both map white exactly (the CAT with full adaptation); only the MAT also handles a change of observer.*
 
 The shape of the route is the same; what the middle step is built to keep is what differs.
 
@@ -258,7 +274,7 @@ The shape of the route is the same; what the middle step is built to keep is wha
 | White and grays | Mapped exactly (with full adaptation) | Mapped exactly |
 | Typical use | Appearance, color appearance models | Converting measurements, custom observers, comparing conditions |
 
-**Does it work?** Over 5,162 real reflectances (flowers, ColorChecker charts, Munsell, natural objects, paper, lumber, IT8 targets; the set includes Munsell samples of the kind Wpt is built from), the Wpt MAT predicted D65 colorimetry from other conditions more closely than CAT02 or earlier published MATs did (the Wpt paper, Further reading 2). For the 10° observer the mean ΔE<sub>00</sub> from illuminant A was 1.24 for the Wpt MAT against 2.35 for CAT02. The companion package runs a smaller version of this test (1,600 Munsell colors, CIE 1931 observer, A to D65): 1.09 for the Wpt MAT against 2.26 for CAT02. As you would expect, on the corresponding-color data in the same paper CAT02 predicts how colors look better than the MAT does. Each is best at its own job.
+**Does it work?** Over 5,162 real reflectances (flowers, ColorChecker charts, Munsell, natural objects, paper, lumber, IT8 targets; the set includes Munsell samples of the kind Wpt is built from), the Wpt MAT predicted D65 colorimetry from other conditions more closely than CAT02 or earlier published MATs did (the Wpt paper, Further reading 2). For the 10° observer the mean ΔE<sub>00</sub> from illuminant A was 1.24 for the Wpt MAT against 2.35 for CAT02. The companion package runs a smaller version of this test (1,600 Munsell colors, CIE 1931 observer, A to D65): 1.09 for the Wpt MAT against 2.26 for CAT02. The *Comparing MATs and CATs* lab reruns it, and the same test for other lights and other sets of materials. As you would expect, on the corresponding-color data in the same paper CAT02 predicts how colors look better than the MAT does. Each is best at its own job.
 
 The two also chain together: a MAT can bring measurements to a standard condition, and a CAT or color appearance model can take over from there.
 
@@ -277,6 +293,8 @@ WLab values from any material, light and observer share one common representatio
 
 One caution for the observer and light rows: each Wpt normalization absorbs the overall difference between its condition and the reference, so these numbers measure only what is left. A light that makes every color a little more vivid can score near zero here. The rows show how differently materials behave, not overall shifts.
 
+The Waypoint Labs compute the observer and light rows over many materials at once, as two measures from the author's dissertation (Further reading 6). The *Observer Matching Equivalency* (OME) is how far apart two observers put the same materials, over many materials and lights (the *Observers for observing conditions* lab). The *Illuminant Rendering Equivalency* (IRE) is how far apart two lights put the same materials, over many materials and observers; the *Lighting* lab sets it beside the color rendering indices.
+
 **Shift manifolds.** One material under many lights and observers gives a small cloud of Wpt points, its *Wpt shift manifold*. The cloud's size shows how inconstant the material is, and its shape shows which way it drifts. Research metrics built on these clouds are listed under Further reading. Materials whose spectra have similar overall shapes tend to drift alike.
 
 **Conversions.** A MAT is also a practical tool:
@@ -287,11 +305,11 @@ One caution for the observer and light rows: each Wpt normalization absorbs the 
 
 **Another option to try: gamut mapping.** Every printer and display can reproduce only part of the full range of colors, its *gamut*. Gamut mapping moves colors that fall outside it to ones that fit, usually toward gray while trying to keep their hue. WLab can serve as the space for that mapping. Its distances work like familiar ΔE values, and its hue lines run straight out from white on the familiar horseshoe-shaped chromaticity diagram. In the author's experience, gamut mapping in Wpt gives reasonable results, but how well it works depends on the printer, the display and the images: it is an option to try and judge on your own work.
 
-![Constant WLab hue against constant CIELAB hue](figures/fig5_hue_planes.png)
+![Constant WLab hue against constant CIELAB hue](figures/fig6_hue_planes.png)
 
-*Figure 5. Constant WLab hue against constant CIELAB hue for a red, a green and a blue. Each row is one lightness, from gray (left) to the most vivid color that fits on screen. Each chip is split: upper left, constant WLab hue; lower right, the same L\* and C\*<sub>ab</sub> at the CIELAB hue of the ringed chip, the darkest of the most vivid. CIE 1931 observer, D50 (the ICC profile connection space), shown through a Bradford adaptation to sRGB; a dot marks a CIELAB half outside sRGB. Screen and print colors are approximate.*
+*Figure 6. Constant WLab hue against constant CIELAB hue for a red, a green and a blue. Each row is one lightness, from gray (left) to the most vivid color that fits on screen. Each chip is split: upper left, constant WLab hue; lower right, the same L\* and C\*<sub>ab</sub> at the CIELAB hue of the ringed chip, the darkest of the most vivid. CIE 1931 observer, D50 (the ICC profile connection space), shown through a Bradford adaptation to sRGB; a dot marks a CIELAB half outside sRGB. Screen and print colors are approximate.*
 
-**Try it yourself.** Figure 5 is a small experiment you can run by eye, for three hues: a red, a green and a blue. Each row is one lightness, running from gray to the most vivid color that fits on screen, and each chip is split in two. The upper-left half holds WLab hue constant. The lower-right half has the same lightness and chroma but holds CIELAB hue constant, at the hue of the ringed chip. Where the halves differ, a gamut mapping that keeps CIELAB hue would shift the hue that WLab keeps. Look across the rows, especially toward the lighter and grayer chips, and judge for yourself which half stays closer to the hue of the ringed chip. The two part clearly in the red and the blue, where the CIELAB halves drift toward orange and violet; in the green they are only slightly shifted to yellow. This uneven sensitivity to hue is the same thing ΔE<sub>00</sub>'s hue corrections for blue deal with. The companion package draws the same picture for any hue.
+**Try it yourself.** Figure 6 is a small experiment you can run by eye, for three hues: a red, a green and a blue. Each row is one lightness, running from gray to the most vivid color that fits on screen, and each chip is split in two. The upper-left half holds WLab hue constant. The lower-right half has the same lightness and chroma but holds CIELAB hue constant, at the hue of the ringed chip. Where the halves differ, a gamut mapping that keeps CIELAB hue would shift the hue that WLab keeps. Look across the rows, especially toward the lighter and grayer chips, and judge for yourself which half stays closer to the hue of the ringed chip. The two part clearly in the red and the blue, where the CIELAB halves drift toward orange and violet; in the green they are only slightly shifted to yellow. This uneven sensitivity to hue is the same thing ΔE<sub>00</sub>'s hue corrections for blue deal with. The companion package draws the same picture for any hue, and the *Uniformity and hue* lab draws it in a browser for any observer and light.
 
 ## When to reach for Wpt and WLab
 
@@ -367,7 +385,7 @@ If you can compute CIELAB from a spectrum, you can compute WLab: it is one extra
 
 **With colorimetry only.** If you have XYZ for one known condition but no spectra, a MAT estimates the XYZ for another: apply the source condition's normalization, then the destination's run backwards. The companion package lists ready-made normalizations for the CIE 2° and 10° observers under C, D50, D65, A, E (equal energy), F2 and F11 (two CIE fluorescent lamps). The Wpt paper's published matrices use a slightly different reference; the Technical annex explains how they relate.
 
-**From display colors.** Values in sRGB, Display P3 or Adobe RGB stand for XYZ values for the CIE 1931 observer under D65 (each color space defines the conversion), so they can go through the D65 Wpt normalization into WLab. A display color is not a material: in WLab it stands for the material that would give those numbers under D65, so it says nothing about how a real material would change under other lights. The `wlab` package does this for sRGB, Display P3, Adobe RGB and Rec. 2020 (`rgbToWlab` and `wlabToRgb`).
+**From display colors.** Values in sRGB, Display P3 or Adobe RGB stand for XYZ values for the CIE 1931 observer under D65 (each color space defines the conversion), so they can go through the D65 Wpt normalization into WLab. A display color is not a material: in WLab it stands for the material that would give those numbers under D65, so it says nothing about how a real material would change under other lights. The `wlab` package does this for sRGB, Display P3, Adobe RGB and Rec. 2020 (`rgbToWlab` and `wlabToRgb`). A display's own light, measured wavelength by wavelength for its red, green and blue, says more: from it, the display's colors can be worked out for any observer. The *Profiles: a display for any observer* lab does this, and has the ICC's iccDEV tools write an ordinary (version 4) display profile for that observer, which any color-managed application can use.
 
 **Sanity checks**
 
@@ -380,6 +398,7 @@ If you can compute CIELAB from a spectrum, you can compute WLab: it is one extra
 - **Companion package.** Every example in this guide comes with code you can run and change (the Purplish Blue example needs ColorChecker spectra you supply): GNU Octave (or MATLAB) scripts, the same examples in Python, and an Excel calculator for XYZ to Wpt, WLab and CIELAB, the three color differences, and MATs. All three give the same numbers, and each example is a starting point for your own. It also includes a robustness workbook, with no programming needed, that turns measured spectra into a table like the one in "For buyers and managers", and a Wpt normalization workbook that shows how the normalization is built for any observer and light (Technical annex A.3) and builds MATs for any observer and light.
 - **Robustness report in a browser.** `WLab-robustness-report.html`, in the companion package, makes the table in "For buyers and managers" from pasted spectra, with your own lights if you like. It is a single page that opens with a double-click, needs nothing installed and sends nothing anywhere. It is built on `wlab`, an implementation of Wpt, WLab and MATs in TypeScript for developers who want them in their own web tools.
 - **iccMAX.** The open-source [iccDEV](https://github.com/InternationalColorConsortium/iccDEV) tools build and apply profiles that carry a Wpt MAT for custom observers.
+- **Waypoint Labs.** Web pages that try the ideas of this guide on your own data, in a browser and sending nothing anywhere: normalizations and MATs for any observer and light, materials across many lights and observers, observers, lighting, uniformity and display profiles. They start at [waypointcolor.github.io/wpt-onramp/labs/start.html](https://waypointcolor.github.io/wpt-onramp/labs/start.html) ("Where to go next", at the end of Further reading).
 
 The companion package is at [github.com/waypointcolor/wpt-onramp](https://github.com/waypointcolor/wpt-onramp). Its web page, with the short version of this guide and an animation of CIELAB and WLab across viewers and lights, is at [waypointcolor.github.io/wpt-onramp](https://waypointcolor.github.io/wpt-onramp/), and `wlab` is at [github.com/waypointcolor/wlab](https://github.com/waypointcolor/wlab).
 
@@ -398,6 +417,7 @@ The companion package is at [github.com/waypointcolor/wpt-onramp](https://github
 | D50, D65, A, C | Standard lights: D50 and D65 are daylight (printing and general use), A is incandescent (a filament bulb), C is an older daylight standard |
 | ΔE<sub>00</sub> (CIEDE2000) | The standard color-difference formula, computed from CIELAB |
 | ΔE<sub>WLab</sub> | The straight-line distance between two WLab values; a material color difference |
+| LSWLab (Large-Scale Waypoint Lab) | WLab with chroma counted as ΔE\*<sub>ab</sub> counts it, for even steps and large differences |
 | Illuminant | An idealized light, specified by how much power it gives at each wavelength |
 | Least dissimilar match | Picking the sample under a new light that differs least from the original, when none matches exactly |
 | MAT (material adjustment transform) | Predicts a material's numbers under a different light, observer or both |
@@ -409,6 +429,7 @@ The companion package is at [github.com/waypointcolor/wpt-onramp](https://github
 | Practical Wpt | Wpt carried to a new condition through base reflectances you choose |
 | Reference condition | The CIE 1931 observer under illuminant C, with the Munsell Renotation: the fixed basis of Wpt |
 | Spectral reflectance | The fraction of light a material reflects at each wavelength |
+| Unique hues | The blue and yellow that look neither reddish nor greenish, and the green that looks neither yellowish nor bluish |
 | Wpt (Waypoint) | Material coordinates: W linear lightness (like Y), p red–green, t yellow–blue |
 | Wpt normalization | The basic math steps, worked out for each observing condition, that turn an observer's three responses into Wpt |
 | Wpt shift manifold | The cloud of Wpt points one material makes across many conditions |
@@ -627,13 +648,21 @@ $$
 
 and $p = c_{pt} \cos h_{pt}$, $t = c_{pt} \sin h_{pt}$.
 
+**LSWLab.** The Large-Scale Waypoint Lab (from the thesis, Further reading 6) keeps $L_w$ and $h_w$ and replaces WLab's chroma. WLab's chroma compression has a hue-dependent part and an average part; LSWLab undoes the average part with its constants $D_0 = 24.9523$ and $D_1 = 0.1104$, in the form of the WLab-to-Wpt step above, so that chroma grows about as ΔE\*<sub>ab</sub> counts it, and then scales it by S:
+
+$$
+c_{LS} = S \cdot 80 \left[ e^{\,c_w / D_0 + \ln D_1} - D_1 \right], \qquad c_w = D_0 \left[ \ln\!\left(\frac{c_{LS}}{80\, S} + D_1\right) - \ln D_1 \right]
+$$
+
+with $a_{LS} = c_{LS} \cos h_w$, $b_{LS} = c_{LS} \sin h_w$; LSWLab is ($L_w$, $a_{LS}$, $b_{LS}$), and ΔE<sub>LSWLab</sub> is the straight-line distance in it. The thesis's form has S = 1. With S = 2.2, used in `wlab` and the Waypoint Labs, its distances come out the size of ΔE\*<sub>ab</sub>'s: fitted over 1,300 Munsell colors (CIE 1931 observer, illuminant C), S is 2.25 from chroma alone and 2.16 from distances between neighboring colors and 3,000 random pairs. LSWLab is implemented in `wlab` only (A.8).
+
 ### A.6 ΔE<sub>WLab</sub>
 
 $$
 \Delta E_{\mathrm{WLab}} = \sqrt{(L_{w,1} - L_{w,2})^2 + (a_{w,1} - a_{w,2})^2 + (b_{w,1} - b_{w,2})^2}
 $$
 
-The two WLab values may come from different observing conditions, since every condition goes through Wpt. ΔE<sub>WLab</sub> (written ΔE<sub>w</sub> in the WLab paper and in the thesis) is a material color difference. For responses $c$ in any condition, $A\,c = A_{\mathrm{ref}}\,(A_{\mathrm{ref}}^{-1} A\,c)$, and $A_{\mathrm{ref}}^{-1} A\,c$ is the MAT's prediction of the reference responses (A.7): Wpt in any condition is the reference condition's Wpt of what the reference observer (CIE 1931) is predicted to see under illuminant C. A ΔE<sub>WLab</sub> therefore estimates the color difference that observer would judge between the two materials under illuminant C. The estimate is approximate: what the reference observer actually sees for a material under illuminant C can differ from the prediction, and that difference is the material's observing-condition (observer + illuminant) metamerism between the two conditions, the color inconstancy of A.7. In the WLab paper's tests against two datasets from color-difference assessment experiments (CIE 1964 (10°) observer under D65 and illuminant A), it was not statistically different from ΔE<sub>94</sub>, ΔE<sub>00</sub>, DIN99o or CAM02-UCS. For large differences, the paper compared each space's lightness, chroma and hue with Munsell Value, Chroma and Hue over the Munsell colors (its Fig. 7): WLab tracks the Munsell system about as closely as CIELAB and CAM02-UCS do.
+The two WLab values may come from different observing conditions, since every condition goes through Wpt. ΔE<sub>WLab</sub> (written ΔE<sub>w</sub> in the WLab paper and in the thesis) is a material color difference. For responses $c$ in any condition, $A\,c = A_{\mathrm{ref}}\,(A_{\mathrm{ref}}^{-1} A\,c)$, and $A_{\mathrm{ref}}^{-1} A\,c$ is the MAT's prediction of the reference responses (A.7): Wpt in any condition is the reference condition's Wpt of what the reference observer (CIE 1931) is predicted to see under illuminant C. A ΔE<sub>WLab</sub> therefore estimates the color difference that observer would judge between the two materials under illuminant C. The estimate is approximate: what the reference observer actually sees for a material under illuminant C can differ from the prediction, and that difference is the material's observing-condition (observer + illuminant) metamerism between the two conditions, the color inconstancy of A.7. In the WLab paper's tests against two datasets from color-difference assessment experiments (CIE 1964 (10°) observer under D65 and illuminant A), it was not statistically different from ΔE<sub>94</sub>, ΔE<sub>00</sub>, DIN99o or CAM02-UCS. For large differences, the paper compared each space's lightness, chroma and hue with Munsell Value, Chroma and Hue over the Munsell colors (its Fig. 7), and found WLab tracking the Munsell system about as closely as CIELAB and CAM02-UCS. Measured one dimension at a time (the Waypoint Labs' *Uniformity and hue* lab: CIE 1931 observer, illuminant C, Munsell Value 5, means over the 40 Hues and 7 Chroma rings), the picture is mixed. The root mean square of hue angle along one Munsell Hue is 1.7° in WLab, 1.3° in CIELAB and 1.0° in CAM16-UCS. The relative root mean square of chroma around one Munsell Chroma ring is 5.2%, 18.4% and 7.8%. The relative root mean square of the chroma gained per step of Munsell Chroma along one Hue is 29.7%, 4.0% and 21.5%: WLab's chroma is a logarithm of Wpt's chroma (A.5), which narrows the large steps toward high chroma. In LSWLab (A.5) the last two are 8.2% and 9.7%, and its hue is WLab's. Against ΔE\*<sub>ab</sub>, over neighboring Munsell colors and 3,000 random pairs (CIE 1931, illuminant C), ΔE<sub>LSWLab</sub> has a STRESS of 17.9 and 10.7 (fitted scale 1.00 and 0.99), against 15.2 and 10.5 for ΔE<sub>WLab</sub> against ΔE<sub>00</sub> (STRESS is the usual measure of disagreement between two sets of differences, 0 for perfect agreement).
 
 ### A.7 Material adjustment transforms and observer conversion
 
@@ -676,6 +705,7 @@ $$
 | A.3 Wpt normalization | `getWptStruct.m` | `wpt_normalization` | `wptNormalization` | Matrices sheet (14 conditions) |
 | A.4 Reference p, t | `wpt_reference_pt.csv` | `load_base` | `munsellBase` | — |
 | A.5 WLab | `Wpt2WLab.m`, `WLab2Wpt.m` | `wpt_to_wlab`, `wlab_to_wpt` | `wptToWlab`, `wlabToWpt` | Calculator (forward) |
+| A.5 LSWLab | — | — | `wlabToLswlab`, `lswlabToWlab`, `deltaELswlab` | — |
 | A.6 ΔE<sub>WLab</sub> | `ex02`, `ex06` | `delta_e_wlab` | `deltaEWlab` | Calculator: ΔE<sub>WLab</sub> |
 | A.7 MAT, CAT | `ex05_mats.m` | `mat` | `mat`, `cat` | MAT sheet |
 

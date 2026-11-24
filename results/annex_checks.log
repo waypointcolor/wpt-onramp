@@ -14,5 +14,12 @@
    D50  largest 1.66  mean 0.38
    A    largest 8.96  mean 2.09
 6. D65 against a three-band LED with the same white, 1600 Munsell, CIE 1931, DeltaE00
-   bands at (450, 540, 610) nm, 12 nm wide: colors change by mean 2.63, largest 9.1 (= CAT error); Wpt MAT error mean 1.09, largest 5.0
-   bands at (455, 530, 620) nm, 20 nm wide: colors change by mean 2.29, largest 7.1 (= CAT error); Wpt MAT error mean 0.74, largest 5.0
+   RGB-D65 (the Labs), peaks 455, 530, 630 nm, 20, 35, 18 nm wide: colors change by mean 4.07, largest 13.2 (= CAT error); Wpt MAT error mean 1.23, largest 6.3
+   Gaussian bands at (450, 540, 610) nm, 12 nm wide: colors change by mean 2.63, largest 9.1 (= CAT error); Wpt MAT error mean 1.09, largest 5.0
+   Gaussian bands at (455, 530, 620) nm, 20 nm wide: colors change by mean 2.29, largest 7.1 (= CAT error); Wpt MAT error mean 0.74, largest 5.0
+7. Where p and t cross 0 (the curves scaled so that W peaks at 1)
+   CIE 1931 under D65: p at [478.7, 577.2] nm, t at [501.2] nm; W peaks at 555 nm
+   CIE 1931 under E  : p at [478.9, 579.4] nm, t at [501.1] nm; W peaks at 550 nm
+   CIE 1931 under A  : p at [486.9, 585.3] nm, t at [506.8] nm; W peaks at 545 nm
+   CIE 1964 under D65: p at [474.3, 574.6] nm, t at [497.3] nm; W peaks at 560 nm
+   CIE 2015 under D65: p at [476.6, 577.4] nm, t at [499.7] nm; W peaks at 555 nm

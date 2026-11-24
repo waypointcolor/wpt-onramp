@@ -8,6 +8,7 @@
 4. WLab with the constants rounded as published (annex A.5).
 5. Lw against CIELAB L* (guide "Sanity checks").
 6. Two lights with the same white: D65 against a three-band LED with D65's X, Y, Z (guide "CATs and MATs").
+7. Where the W, p and t curves of an observer cross 0 (guide "Wpt", the figure of the sensors in Wpt).
 """
 
 from pathlib import Path
@@ -81,18 +82,50 @@ for ill in ('C', 'D65', 'D50', 'A'):
 
 # 6. A white LED of three narrow bands, weighted so that its white has exactly D65's X, Y, Z (CIE 1931).
 # A CAT sees only the white, so it predicts no change; the Wpt MAT works from how materials respond.
+# The guide uses the Waypoint Labs' RGB-D65 (wlab's web/labs/lights.ts): three peaks in a common model of an LED's
+# spectrum, (g + 2 g^5) / 3 with g Gaussian, at 455, 530 and 630 nm, 20, 35 and 18 nm wide at half height.
+# The two Gaussian-band LEDs after it are the guide's earlier example, kept for comparison.
+def led_peak(peak, width):
+    g = np.exp(-(((T.nm - peak) / (width / 0.92182)) ** 2))
+    return (g + 2 * g ** 5) / 3
+
+
+def gauss(peaks, width):
+    return np.column_stack([np.exp(-0.5 * ((T.nm - c) / width) ** 2) for c in peaks])
+
+
 obs, d65 = T.observer['1931'], T.illuminant['D65']
 p('6. D65 against a three-band LED with the same white, 1600 Munsell, CIE 1931, DeltaE00')
-for peaks, width in (((450, 540, 610), 12), ((455, 530, 620), 20)):
-    bands = np.column_stack([np.exp(-0.5 * ((T.nm - c) / width) ** 2) for c in peaks])
+for name, bands in (('RGB-D65 (the Labs), peaks 455, 530, 630 nm, 20, 35, 18 nm wide',
+                     np.column_stack([led_peak(c, wd) for c, wd in ((455, 20), (530, 35), (630, 18))])),
+                    ('Gaussian bands at (450, 540, 610) nm, 12 nm wide', gauss((450, 540, 610), 12)),
+                    ('Gaussian bands at (455, 530, 620) nm, 20 nm wide', gauss((455, 530, 620), 20))):
     led = bands @ np.linalg.solve(obs.T @ bands, obs.T @ d65)
     lab_d65, lab_led = w.ref2lab(M1600, obs, d65), w.ref2lab(M1600, obs, led)
     change = w.delta_e00(lab_d65, lab_led)                       # also the CAT's error: it predicts no change
     mat = w.mat(w.wpt_normalization(obs, d65, (NAMES, BASE_X, PT)), w.wpt_normalization(obs, led, (NAMES, BASE_X, PT)))
     white_led = w.ref2xyz(np.ones(len(T.nm)), obs, led)[:, 0]
     err = w.delta_e00(w.xyz_to_lab(mat @ w.ref2xyz(M1600, obs, d65), white_led), lab_led)
-    p(f'   bands at {peaks} nm, {width} nm wide: colors change by mean {change.mean():.2f}, largest {change.max():.1f} '
+    p(f'   {name}: colors change by mean {change.mean():.2f}, largest {change.max():.1f} '
       f'(= CAT error); Wpt MAT error mean {err.mean():.2f}, largest {err.max():.1f}')
+
+
+# 7. The sensors in Wpt: the normalization's rows applied to the observer's curves (guide "Wpt"), and where p and t
+# cross 0. The Waypoint Labs' Normalization lab draws the same curves (wlab's wptCurves).
+def wpt_curves(obs, ill):
+    c = w.wpt_normalization(T.observer[obs], T.illuminant[ill], (NAMES, BASE_X, PT)).xyz2wpt @ T.observer[obs].T
+    return c / c[0].max()
+
+
+def zeros(v):
+    i = np.nonzero((v[:-1] * v[1:] < 0) & (np.maximum(abs(v[:-1]), abs(v[1:])) > 0.01))[0]
+    return [round(float(T.nm[j] + 5 * v[j] / (v[j] - v[j + 1])), 1) for j in i]
+
+
+p('7. Where p and t cross 0 (the curves scaled so that W peaks at 1)')
+for o, ill in (('1931', 'D65'), ('1931', 'E'), ('1931', 'A'), ('1964', 'D65'), ('2015', 'D65')):
+    c = wpt_curves(o, ill)
+    p(f'   CIE {o} under {ill:3s}: p at {zeros(c[1])} nm, t at {zeros(c[2])} nm; W peaks at {T.nm[c[0].argmax()]:.0f} nm')
 
 text = '\n'.join(out) + '\n'
 print(text, end='')
